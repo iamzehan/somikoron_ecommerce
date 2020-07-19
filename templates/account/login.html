@@ -1,7 +1,9 @@
 {% extends "shop/nav_footer.html" %}
+
 <!doctype html>
 <html lang="en" >
 <head >
+
     <meta charset="UTF-8" >
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" >
     <meta http-equiv="X-UA-Compatible" content="ie=edge" >
@@ -16,9 +18,9 @@
 {% block body %}
     {% load i18n %}
 {#    {% load account socialaccount %}#}
-{#    {% load socialaccount %}#}
-{#    {% providers_media_js %}#}
     {% load crispy_forms_tags %}
+{% load socialaccount %}
+{% providers_media_js %}
     <div id="main" >
         <div class="ogami-breadcrumb" >
             <div class="container" >
@@ -102,10 +104,11 @@
                                     <div class="or-seperator" ><i >or</i ></div >
                                     <p class="text-center" >Login with your social media account</p ><br >
                                     <div class="text-center social-btn" >
-                                        <a href="#" class="btn btn-primary" ><i class="social_facebook" ></i >&nbsp; Facebook</a >
+                                        <a href='{% provider_login_url "facebook" method="oauth2" %}' class="btn btn-primary" ><i class="social_facebook" ></i >&nbsp; Facebook</a >
                                         <a href="#" class="btn btn-info" ><i class="social_twitter" ></i >&nbsp; Twitter</a >
-                                        <a href="#" class="btn btn-danger" ><i class="social_googleplus"></i >&nbsp; Google</a >
+                                        <a href='{% provider_login_url "google" %}' class="btn btn-danger" ><i class="social_googleplus"></i >&nbsp; Google</a >
                                     </div ><br>
+                                <div class="account-function" >
                                     <a class="create-account" href="{{ signup_url }}" >Or create an account</a >
                                 </div >
                             </form >

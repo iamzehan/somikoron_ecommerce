@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    #providers
     'allauth.socialaccount.providers.discord',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
@@ -57,7 +58,7 @@ INSTALLED_APPS = [
     'search',
 ]
 
-SITE_ID = 2
+SITE_ID = 1
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -190,10 +191,18 @@ SOCIALACCOUNT_PROVIDERS = \
           'EXCHANGE_TOKEN': True,
           'LOCALE_FUNC'   : lambda request: 'kr_KR',
           'VERIFIED_EMAIL': False,
-          'VERSION'       : 'v2.4'}}
-# facebook
-SOCIAL_AUTH_FACEBOOK_KEY = '629271397680203'  # App ID
-SOCIAL_AUTH_FACEBOOK_SECRET = 'e4a51b5b5c3e919ec82a2fdb5840a675'  # app key
+          'VERSION'       : 'v2.4'},
+     'google': {
+         'APP': {
+             'client_id',
+             'secret',
+             'key',
+         }
+     }
+     }
+# # facebook
+# SOCIAL_AUTH_FACEBOOK_KEY = '629271397680203'  # App ID
+# SOCIAL_AUTH_FACEBOOK_SECRET = 'e4a51b5b5c3e919ec82a2fdb5840a675'  # app key
 ACCOUNT_LOGOUT_ON_GET = True
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 

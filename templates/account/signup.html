@@ -1,5 +1,7 @@
 {% extends "shop/nav_footer.html" %}
 {% load i18n %}
+TEMPLATE TAGS :
+
 {% block head_title %}{% trans "Signup" %}{% endblock %}
 {% load crispy_forms_tags %}
 {% block body %}
@@ -7,8 +9,7 @@
         <div class="container" >
             <!-- End header-->
             <div class="ogami-breadcrumb" >
-                <div class="container" >
-                    <ul >
+zy                    <ul >
                         <li ><a class="breadcrumb-link" href="index.html" > <i class="fas fa-home" ></i >Home</a ></li >
                         <li ><a class="breadcrumb-link active" href="#" >Register</a ></li >
                     </ul >
@@ -26,8 +27,6 @@
                                 {% if redirect_field_value %}
                                     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
                                 {% endif %}
-
-                                <div class="account-function" >
                                     <button class="no-round-btn" >Register</button >
                                     <a class="create-account" href="{{ login_url }}" >Or login</a >
                                 </div >
