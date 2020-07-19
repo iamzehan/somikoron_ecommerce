@@ -17,10 +17,11 @@ urlpatterns = [
     path('checkout/', views.CheckoutView.as_view(), name='checkout'),
     path('order-complete/', views.OrderCompleteView.as_view(), name='order-complete'),
     path('cattle-shop/', views.CattleshopView.as_view(), name='cattle-shop'),
-    path('quick-view/', views.QuickView.as_view(), name='quick-view'),
+    path('quick-view/<slug>', views.QuickView.as_view(), name='quick-view'),
     path('cart-item-view/', views.CartItemView.as_view(), name='cart-item-view'),
     path('get-cart-items/', views.get_cart_items, name='get-cart-items'),
     path('cart_demo/', views.cart_demo, name='cart_demo'),
     path('about_us/', views.about_us, name='about_us'),
     path('contact_us/', views.contact_us, name='contact_us'),
+    path('place-order/', views.plcae_order, name='place-order'),
 ]

@@ -7,8 +7,8 @@
 
         <header class="coffee-2" style="margin-top: 65px !important;" >
             <div class="navigation-filter" >
-                <div class="container" >
-                    <div class="row" >
+                <div class="container " >
+                    <div class="row text-center" >
                         <div class="col-12 col-md-4 col-lg-4 col-xl-3 order-2 order-md-1" >
                             <div class="department-menu_block" >
                                 <div class="department-menu d-flex justify-content-between align-items-center" ><i class="fas fa-bars" ></i >All
@@ -83,7 +83,7 @@
                     {% for result in results %}
                         <div class="col-6 col-md-4 col-lg-3 cartable" >
                             <div class="product coffee" ><a class="product-img" href="{{ result.itemdetails.get_absolute_url }}" ><img
-                                    class="img-fluid" src="{{ result.images.all.0.image.url }}"
+                                    class="img-fluid product__image" src="{{ result.images.all.0.image.url }}"
                                     alt="{{ result.itemdetails.get_absolute_url }}" ></a >
                                 <h5 class="product-type" >{{ result.sub_category.category.category_name }}</h5 >
                                 <h3 class="product-name" >{{ result.title }}</h3 >
@@ -96,7 +96,10 @@
                                     <h3 class="product-price" ><small style="font-size: small" >৳</small > {{ result.price }}</h3 >
                                 {% endif %}
                                 <div class="openSidebar" onclick="atcSidebar()" >
-                                    <button class="all_btn" >Add to cart</button >
+                                    <p hidden class="product__name" >{{ item.pk }}</p >
+                                                    <p hidden class="product__title" >{{ result.title }}</p >
+                                                    <p hidden class="product__price" >{{ result.itemdetails.get_discounted_price }}</p >
+                                                    <button class="all_btn" data-action="ADD_TO_CART" name="btn{{ result.pk }}">Add to cart</button >
                                 </div >
                                 <div class="product-select" >
                                     <button class="add-to-wishlist round-icon-btn coffee" ><i class="icon_heart_alt" ></i ></button >
@@ -104,7 +107,8 @@
                                             onclick="location.href='#'" ><i
                                             class="icon_bag_alt" ></i ></button >
                                     <button class="add-to-compare round-icon-btn coffee" ><i class="fa-random" ></i ></button >
-                                    <button class="quickview round-icon-btn coffee" ><i class="far fa-eye" ></i ></button >
+                                    <button class="round-icon-btn coffee quickviewbtn" id="quickviewbtn" title="Quick Details"  data-url ="{% url 'shop:quick-view' result.slug %}" ><i
+                                                                class="far fa-eye" ></i ></button >
                                 </div >
                             </div >
                         </div >
@@ -112,6 +116,11 @@
                 </div >
             </div >
         </div >
+        <script type="text/javascript" >
+            $(document).ready(function () {
+                document.getElementById('floatcart').style.display = 'block'
+            })
+        </script >
     {% endblock %}
 {% else %}
     <div class="container col-8 col-md-8 col-lg-5 col-xl-7" ><h6 ><b >No items found</b ></h6 ></div >

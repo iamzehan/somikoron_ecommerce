@@ -38,14 +38,19 @@
                                         <!-- Nested div for requirement -->
                                         <div class="vertical-nav" >
                                             {% for cat in categories %}
-                                                <li ><a href="{{ cat.get_absolute_url }}" ><i
-                                                        class="icon-{{ forloop.counter }}" ></i >{{ cat.category_name }}</a >
-                                                    <i class="fa fa-chevron-right float-right" aria-hidden="true" ></i >
+                                                <li ><a href="{{ cat.get_absolute_url }}" ><i >
+                                                    <img style="width: 25px" src="{% static 'assets/images/custom_icons/' %}{{ cat.category_id }}.png" alt="" >
+                                                </i >{{ cat.category_name }}</a >
                                                     {% if cat.subcategory_set.count > 0 and cat.category_name not in  cat.subcategory_set.all.0.sub_category_name %}
+                                                        <i class="fa fa-chevron-right float-right" aria-hidden="true" ></i >
                                                         <ul class="sub-menu" >
                                                             {% for subcat in cat.subcategory_set.all %}
-                                                                <li ><a href="{{ subcat.get_absolute_url }}" > <i
-                                                                        class="icon-2" ></i >{{ subcat.sub_category_name }}</a ></li >
+                                                                <li ><a href="{{ subcat.get_absolute_url }}" >
+                                                                    <i >
+                                                                        <img STYLE="width: 20px" src="
+                                                                                {% static 'assets/images/custom_icons/flatIcon/' %}{{ cat.category_id }}.png"
+                                                                             alt="" >
+                                                                    </i >{{ subcat.sub_category_name }}</a ></li >
                                                             {% endfor %}
                                                         </ul >
                                                     {% endif %}
@@ -337,7 +342,7 @@
                                         <div class="col-6 col-md-4 col-lg-3 cartable" >
                                             <div class="product coffee" >
                                                 <a class="product-img " href="{{ item.itemdetails.get_absolute_url }}" ><img
-                                                        class="img-fluid product__image" src="{{ item.images.all.0.image.url }}"
+                                                        class="img-fluid product__image" src="{{ item.images.all.0.image.thumbnail.url }}"
                                                         alt="{{ item.images.all.0.image.url }}" ></a >
                                                 <h5 class="product-type" >{{ item.sub_category.category.category_name }}</h5 >
                                                 <h3 class="product-name" >{{ item.title }}</h3 >
@@ -353,14 +358,14 @@
                                                     <p hidden class="product__name" >{{ item.pk }}</p >
                                                     <p hidden class="product__title" >{{ item.title }}</p >
                                                     <p hidden class="product__price" >{{ item.itemdetails.get_discounted_price }}</p >
-                                                    <button class="all_btn" data-action="ADD_TO_CART" >Add to cart</button >
+                                                    <button class="all_btn" data-action="ADD_TO_CART" name="btn{{ item.pk }}">Add to cart</button >
                                                 </div >
                                                 <div class="product-select" >
                                                     <button class="add-to-wishlist round-icon-btn coffee" title="Add to Favorite" ><i
                                                             class="icon_heart_alt" ></i ></button >
                                                     <button class="add-to-compare round-icon-btn coffee" ><i class="far fa-random" ></i ></button >
-                                                    <button class="quickview round-icon-btn coffee" title="Quick Details" ><i
-                                                            class="far fa-eye" ></i ></button >
+                                                    <button class="round-icon-btn coffee quickviewbtn" id="quickviewbtn" title="Quick Details"  data-url ="{% url 'shop:quick-view' item.slug %}" ><i
+                                                                class="far fa-eye" ></i ></button >
                                                 </div >
                                             </div >
                                         </div >
@@ -405,7 +410,7 @@
                                     {% for item in object_list|dictsortreversed:"itemdetails.update_date"|slice:":4" %}
                                         <div class="col-6 col-md-4 col-lg-3" >
                                             <div class="product coffee" ><a class="product-img" href="{{ item.itemdetails.get_absolute_url }}" ><img
-                                                    class="img-fluid" src="{{ item.images.all.0.image.url }}"
+                                                    class="img-fluid" src="{{ item.images.all.0.image.thumbnail.url }}"
                                                     alt="{{ item.images.all.0.image.url }}" ></a >
                                                 <h5 class="product-type" >{{ item.sub_category.category.category_name }}</h5 >
                                                 <h3 class="product-name" >{{ item.title }}</h3 >
@@ -419,14 +424,14 @@
                                                 {% endif %}
                                                 <div class="openSidebar" >
                                                     <p hidden class="product__name" >{{ item.pk }}</p >
-                                                    <button class="all_btn" data-action="ADD_TO_CART" >Add to cart</button >
+                                                    <button class="all_btn" data-action="ADD_TO_CART" name="btn{{ item.pk }}">Add to cart</button >
                                                 </div >
                                                 <div class="product-select" >
                                                     <button class="add-to-wishlist round-icon-btn coffee" title="Add to Favorite" ><i
                                                             class="icon_heart_alt" ></i ></button >
                                                     <button class="add-to-compare round-icon-btn coffee" ><i class="far fa-random" ></i ></button >
-                                                    <button class="quickview round-icon-btn coffee" title="Quick Details" ><i
-                                                            class="far fa-eye" ></i ></button >
+                                                    <button class="round-icon-btn coffee quickviewbtn" id="quickviewbtn" title="Quick Details"  data-url ="{% url 'shop:quick-view' item.slug %}" ><i
+                                                                class="far fa-eye" ></i ></button >
                                                 </div >
                                             </div >
                                         </div >
@@ -471,7 +476,7 @@
                                     {% for item in object_list|dictsortreversed:"itemdetails.total_views"|slice:":4" %}
                                         <div class="col-6 col-md-4 col-lg-3" >
                                             <div class="product coffee" ><a class="product-img" href="{{ item.itemdetails.get_absolute_url }}" ><img
-                                                    class="img-fluid" src="{{ item.images.all.0.image.url }}"
+                                                    class="img-fluid" src="{{ item.images.all.0.image.thumbnail.url }}"
                                                     alt="{{ item.images.all.0.image.url }}" ></a >
                                                 <h5 class="product-type" >{{ item.sub_category.category.category_name }}</h5 >
                                                 <h3 class="product-name" >{{ item.title }}</h3 >
@@ -484,14 +489,14 @@
                                                     <h3 class="product-price" ><small style="font-size: small" >৳</small > {{ item.price }}</h3 >
                                                 {% endif %}
                                                 <div class="openSidebar" >
-                                                    <button class="all_btn" data-action="ADD_TO_CART" >Add to cart</button >
+                                                    <button class="all_btn" data-action="ADD_TO_CART" name="btn{{ item.pk }}">Add to cart</button >
                                                 </div >
                                                 <div class="product-select" >
                                                     <button class="add-to-wishlist round-icon-btn coffee" title="Add to Favorite" ><i
                                                             class="icon_heart_alt" ></i ></button >
                                                     <button class="add-to-compare round-icon-btn coffee" ><i class="far fa-random" ></i ></button >
-                                                    <button class="quickview round-icon-btn coffee" title="Quick Details" ><i
-                                                            class="far fa-eye" ></i ></button >
+                                                    <button class="round-icon-btn coffee quickviewbtn" id="quickviewbtn" title="Quick Details"  data-url ="{% url 'shop:quick-view' item.slug %}" ><i
+                                                                class="far fa-eye" ></i ></button >
                                                 </div >
                                             </div >
                                         </div >
@@ -576,7 +581,7 @@
                                                 <div class="mini-product coffee" >
                                                     <div class="mini-product_img" ><a
                                                             href="{{ item.itemdetails.get_absolute_url }}" ><img
-                                                            src="{{ item.images.all.0.image.url }}"
+                                                            src="{{ item.images.all.0.image.thumbnail.url }}"
                                                             alt="product image" ></a ></div >
                                                     <div class="mini-product_info" ><a
                                                             href="{{ item.itemdetails.get_absolute_url }}" >{{ item.title }}</a >
@@ -599,7 +604,7 @@
                                                 <div class="mini-product coffee" >
                                                     <div class="mini-product_img" ><a
                                                             href="{{ item.itemdetails.get_absolute_url }}" ><img
-                                                            src="{{ item.images.all.0.image.url }}"
+                                                            src="{{ item.images.all.0.image.thumbnail.url }}"
                                                             alt="product image" ></a ></div >
                                                     <div class="mini-product_info" ><a
                                                             href="{{ item.itemdetails.get_absolute_url }}" >{{ item.title }}</a >
@@ -622,7 +627,7 @@
                                                 <div class="mini-product coffee" >
                                                     <div class="mini-product_img" ><a
                                                             href="{{ item.itemdetails.get_absolute_url }}" ><img
-                                                            src="{{ item.images.all.0.image.url }}"
+                                                            src="{{ item.images.all.0.image.thumbnail.url }}"
                                                             alt="product image" ></a ></div >
                                                     <div class="mini-product_info" ><a
                                                             href="{{ item.itemdetails.get_absolute_url }}" >{{ item.title }}</a >
@@ -656,7 +661,7 @@
                                                     <div class="mini-product coffee" >
                                                         <div class="mini-product_img" ><a
                                                                 href="{{ item.itemdetails.get_absolute_url }}" ><img
-                                                                src="{{ item.images.all.0.image.url }}"
+                                                                src="{{ item.images.all.0.image.thumbnail.url }}"
                                                                 alt="product image" ></a ></div >
                                                         <div class="mini-product_info" ><a
                                                                 href="{{ item.itemdetails.get_absolute_url }}" >{{ item.title }}</a >
@@ -767,7 +772,7 @@
                                                     <div class="mini-product coffee" >
                                                         <div class="mini-product_img" ><a
                                                                 href="{{ item.itemdetails.get_absolute_url }}" ><img
-                                                                src="{{ item.images.all.0.image.url }}"
+                                                                src="{{ item.images.all.0.image.thumbnail.url }}"
                                                                 alt="product image" ></a ></div >
                                                         <div class="mini-product_info" ><a
                                                                 href="{{ item.itemdetails.get_absolute_url }}" >{{ item.title }}</a >
@@ -869,42 +874,7 @@
                     </div >
                 </div >
                 <!-- End home5 product block-->
-                <div class="partner" >
-                    <div class="container" >
-                        <div class="partner_block d-flex justify-content-between"
-                             data-slick="{&quot;slidesToShow&quot;: 6}" >
-                            <div class="partner--logo" href="#" ><a href="#" ><img
-                                    src="{% static 'assets/images/partner/partner_01.png' %}"
-                                    alt="partner"
-                                    title="partner logo" ></a ></div >
-                            <div class="partner--logo" href="#" ><a href="#" ><img
-                                    src="{% static 'assets/images/partner/partner_02.png' %}"
-                                    alt="partner"
-                                    title="partner logo" ></a ></div >
-                            <div class="partner--logo" href="#" ><a href="#" ><img
-                                    src="{% static 'assets/images/partner/partner_01.png' %}"
-                                    alt="partner"
-                                    title="partner logo" ></a ></div >
-                            <div class="partner--logo" href="#" ><a href="#" ><img
-                                    src="{% static 'assets/images/partner/partner_02.png' %}"
-                                    alt="partner"
-                                    title="partner logo" ></a ></div >
-                            <div class="partner--logo" href="#" ><a href="#" ><img
-                                    src="{% static 'assets/images/partner/partner_01.png' %}"
-                                    alt="partner"
-                                    title="partner logo" ></a ></div >
-                            <div class="partner--logo" href="#" ><a href="#" ><img
-                                    src="{% static 'assets/images/partner/partner_02.png' %}"
-                                    alt="partner"
-                                    title="partner logo" ></a ></div >
-                            <div class="partner--logo" href="#" ><a href="#" ><img
-                                    src="{% static 'assets/images/partner/partner_01.png' %}"
-                                    alt="partner"
-                                    title="partner logo" ></a ></div >
-                        </div >
-                    </div >
-                </div >
-                <!-- End partner-->
+
                 {#                <div class="from-blog" >#}
                 {#                    <div class="container" >#}
                 {#                        <div class="row" >#}
@@ -1023,6 +993,11 @@
     </div >
     <script src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/js/swiper.min.js' ></script >
     <script src="{% static 'assets/js/slider.js' %}" ></script >
+    <script type="text/javascript">
+    $(document).ready(function () {
+        document.getElementById('floatcart').style.display = 'block'
+    })
+    </script>
     </body >
     <!-- Mirrored from afinda.vn/html/Ogami/homepage05.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 27 Jun 2020 12:00:51 GMT -->
     </html >

@@ -1,10 +1,18 @@
 from django.conf import settings
 from django.db import models
 from django.shortcuts import reverse
+from stdimage import StdImageField
 
 ADDRESS_CHOICES = (
     ('B', 'Billing'),
     ('S', 'Shipping'),
+)
+
+ORDER_STATUS = (
+    ('RECEIVED', 'Order Received'),
+    ('SHIPPING', 'Order is on the way'),
+    ('DONE', 'Order Completed'),
+    ('CANCELED', 'Order Canceled'),
 )
 
 
@@ -87,7 +95,7 @@ class Items(models.Model):
 
 class ItemDetails(models.Model):
     item = models.OneToOneField(
-        Items, on_delete=models.CASCADE
+        Items, on_delete=models.CASCADE, related_name='itemdetails',
     )
     discount_offer = models.FloatField(default=0)
     color = models.CharField(max_length=50, null=True, blank=True)
@@ -117,7 +125,7 @@ class ItemDetails(models.Model):
             return (self.item.price) - (self.discount_offer * self.item.price)
 
 class CattleInfo(models.Model):
-    item = models.OneToOneField(Items, on_delete=models.CASCADE)
+    item = models.OneToOneField(Items, on_delete=models.CASCADE, related_name='cattleinfo')
     height = models.CharField(max_length=15, null=True, blank=True)
     live_weight = models.FloatField(max_length=10,null=True, blank=True)
     expected_weight = models.FloatField(max_length=10,null=True, blank=True)
@@ -128,12 +136,20 @@ class CattleInfo(models.Model):
 
 class ItemImages(models.Model):
     item = models.ForeignKey(
-        Items, on_delete=models.CASCADE, related_name='images',null=True,blank=True
+        Items, on_delete=models.CASCADE, related_name='images',null=True,blank=True,
+
     )
-    image = models.ImageField(upload_to='media/images/')
+    # image = StdImageField(upload_to='media/images/')
+    # image1 = StdImageField(upload_to='path/to/img')  # works as ImageField
+    # image2 = StdImageField(upload_to='path/to/img', blank=True)  # can be deleted throwgh admin
+    # image3 = StdImageField(upload_to='path/to/img', variations={'thumbnail': (100, 75)})  # creates a thumbnail resized to maximum size to fit a 100x75 area
+    # image4 = StdImageField(upload_to='path/to/img', variations={'thumbnail': (100, 100, True)})
+    image = StdImageField(upload_to='media/images/', blank=True, variations={ 'thumbnail': (220,
+                                                                                            140)}, delete_orphans=True) # all previous features in one declaration
+
 
     def __str__(self):
-        return str(self.pk) + " " + self.item.title
+        return str(self.item.product_code) + " " + self.item.title
 
 
 class OrderItem(models.Model):
@@ -170,6 +186,7 @@ class Order(models.Model):
     ordered_date = models.DateTimeField()
     ordered = models.BooleanField(default=False)
     order_note = models.TextField(max_length=500, null=True, blank=True)
+    order_status = models.CharField(max_length=20, choices=ORDER_STATUS, default='RECEIVED')
     shipping_address = models.ForeignKey(
         'Address', related_name='shipping_address', on_delete=models.SET_NULL, blank=True,
         null=True)

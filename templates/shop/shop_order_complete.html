@@ -133,7 +133,8 @@
                             <div id="headerimage" ></div >
                             <div id="invoice" class="effect2" >
                                 <div id="invoice-top" style="" >
-                                    <div class="logo" ><img src="{% static 'assets/images/logo.png' %}" alt=""  style="width: 200px !important;" ></div >
+                                    <div class="logo" ><img src="{% static 'assets/images/logo.png' %}" alt="" style="width: 200px !important;" >
+                                    </div >
                                     {#                                    <div class="info" >#}
                                     {#                                        <h2 >Michael Truong</h2 >#}
                                     {#                                        <p > hello@michaeltruong.ca </br>#}
@@ -141,7 +142,7 @@
                                     {#                                        </p >#}
                                     {#                                    </div ><!--End Info-->#}
                                     <div class="" style="float: right; padding-right: 20px" >
-                                        <h1 style="padding: 0px; margin: 0px; color: #cb241b" >Invoice #1069</h1 >
+                                        <h1 style="padding: 0px; margin: 0px; color: #cb241b" >Invoice #{{ object.id }}</h1 >
                                         <p >Issued: {% now "jS F Y H:i" %} </br>
                                             Delivery: Within 2 days
                                             {#                                            {% now "SHORT_DATETIME_FORMAT" %}#}
@@ -161,8 +162,7 @@
                                     </div >
                                     <div id="project" class="text-right" style="width: 50%" >
                                         <h2 >Order Notes</h2 >
-                                        <p >Proin cursus, dui non tincidunt elementum, tortor ex feugiat enim, at elementum enim quam vel purus.
-                                            Curabitur semper malesuada urna ut suscipit.</p >
+                                        <p >{{ object.order_note }}</p >
                                     </div >
                                 </div ><!--End Invoice Mid-->
                                 <div id="invoice-bot" >
@@ -187,33 +187,37 @@
                                             {% endfor %}
 
                                             <tr class="tabletitle" style="color: white" >
-                                                <td style="border: yellow solid" ><h2 style="color: white;" >Grand
-                                                                                                             Total: {{ object.get_total|addition:100 |sub:10|stringformat:".2f" }}</h2 >
+                                                <td style="border: yellow solid" ><h2 style="color: white;" >Grand Total:
+                                                    {% if object.get_total >= 1000 %}
+                                                        {{ object.get_total|addition:40 |sub:0|stringformat:".2f" }}
+                                                        {% else %}
+                                                        {{ object.get_total|addition:60 |sub:0|stringformat:".2f" }}
+                                                    {% endif %}
+                                                    </h2 >
                                                 </td >
-                                                <td ><h2 style="color: white" >Delivery: 100</h2 ></td >
-                                                <td class="Rate" ><h2 style="color: white" >Coupon: -10</h2 ></td >
+                                                <td ><h2 style="color: white" >Delivery:
+                                                    {% if object.get_total >= 1000 %}
+                                                                               40
+                                                    {% else %}
+                                                                               60
+                                                    {% endif %}</h2 ></td >
+                                                <td class="Rate" ><h2 style="color: white" >Coupon: -0</h2 ></td >
                                                 <td class="payment" ><h2 style="color: white" >Total: {{ object.get_total|stringformat:".2f" }}</h2 >
                                                 </td >
                                             </tr >
                                         </table >
                                     </div ><!--End Table-->
-                                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" >
-                                        <input type="hidden" name="cmd" value="_s-xclick" >
-                                        <input type="hidden" name="hosted_button_id" value="QRZ7QTM9XRPJ6" >
-                                        <input type="image" src="http://michaeltruong.ca/images/paypal.png" border="0" name="submit"
-                                               alt="PayPal - The safer, easier way to pay online!" >
-                                    </form >
                                     <div id="legalcopy" >
-                                        <p class="legal" ><strong >Thank you for your order!</strong >  Payment is expected within 2 days; please
-                                                                                                      process this invoice within that time. There
-                                                                                                      will be a 5% interest charge per month on
-                                                                                                      late invoices.
+                                        <p class="legal text-center" ><strong >Thank you for your order!</strong >  Payment is expected within the
+                                                                                                                  time; please
+                                                                                                                  Please collect this invoice for
+                                                                                                                  future uses.Thank you.
                                         </p >
                                     </div >
                                 </div ><!--End InvoiceBot-->
                             </div ><!--End Invoice-->
                             <div id="editor" ></div >
-                            <button id="export" class=" btn-secondary" >Export to PDF</button >
+                            {#                            <button id="export" class=" btn-secondary" >Export to PDF</button >#}
                         </div ><!-- End Invoice Holder-->
                     </div >
                     <div class="col-12" >
@@ -259,51 +263,37 @@
             </div >
         </div >
         <!-- End order complete-->
-        <div class="partner" >
-            <div class="container" >
-                <div class="partner_block d-flex justify-content-between" data-slick="{&quot;slidesToShow&quot;: 6}" >
-                    <div id='demo' class="partner--logo" href="#" ><a href="#" ><img src="{% static 'assets/images/partner/partner_01.png' %}"
-                                                                                     alt="partner logo" ></a ></div >
-                    <div class="partner--logo" href="#" ><a href="#" ><img src="{% static 'assets/images/partner/partner_02.png' %}"
-                                                                           alt="partner logo" ></a ></div >
-                    <div class="partner--logo" href="#" ><a href="#" ><img src="{% static 'assets/images/partner/partner_01.png' %}"
-                                                                           alt="partner logo" ></a ></div >
-                    <div class="partner--logo" href="#" ><a href="#" ><img src="{% static 'assets/images/partner/partner_02.png' %}"
-                                                                           alt="partner logo" ></a ></div >
-                    <div class="partner--logo" href="#" ><a href="#" ><img src="{% static 'assets/images/partner/partner_01.png' %}"
-                                                                           alt="partner logo" ></a ></div >
-                    <div class="partner--logo" href="#" ><a href="#" ><img src="{% static 'assets/images/partner/partner_02.png' %}"
-                                                                           alt="partner logo" ></a ></div >
-                    <div class="partner--logo" href="#" ><a href="#" ><img src="{% static 'assets/images/partner/partner_01.png' %}"
-                                                                           alt="partner logo" ></a ></div >
-                </div >
-            </div >
-        </div >
-        <!-- End partner-->
+
     </div >
-{#    <script language="javascript" >#}
-{#        var cache_width = $('#invoiceholder').width(); //Criado um cache do CSS#}
-{#        var a4 = [595.28, 841.89]; // Widht e Height de uma folha a4#}
-{##}
-{#        $(document).on("click", '#export', function () {#}
-{#            // Setar o width da div no formato a4#}
-{#            $("#invoiceholder").width((a4[0] * 1.33333) - 80).css('max-width', 'none');#}
-{##}
-{#            // Aqui ele cria a imagem e cria o pdf#}
-{#            html2canvas($('#invoiceholder'), {#}
-{#                onrendered: function (canvas) {#}
-{#                    var img = canvas.toDataURL("image/jpeg", 1.0);#}
-{#                    //var doc = new jsPDF({ unit: 'px', format: 'a4' });//this line error#}
-{#                    var doc = new jsPDF('landscape'); // default is portrait#}
-{#                    doc.addImage(img, 'JPEG', 20, 20);#}
-{#                    doc.save('NOME-DO-PDF.pdf');#}
-{#                    //Retorna ao CSS normal#}
-{#                    $('#renderPDF').width(cache_width);#}
-{#                }#}
-{#            });#}
-{#        });#}
-{#    </script >#}
+    {#    <script language="javascript" >#}
+    {#        var cache_width = $('#invoiceholder').width(); //Criado um cache do CSS#}
+    {#        var a4 = [595.28, 841.89]; // Widht e Height de uma folha a4#}
+    {##}
+    {#        $(document).on("click", '#export', function () {#}
+    {#            // Setar o width da div no formato a4#}
+    {#            $("#invoiceholder").width((a4[0] * 1.33333) - 80).css('max-width', 'none');#}
+    {##}
+    {#            // Aqui ele cria a imagem e cria o pdf#}
+    {#            html2canvas($('#invoiceholder'), {#}
+    {#                onrendered: function (canvas) {#}
+    {#                    var img = canvas.toDataURL("image/jpeg", 1.0);#}
+    {#                    //var doc = new jsPDF({ unit: 'px', format: 'a4' });//this line error#}
+    {#                    var doc = new jsPDF('landscape'); // default is portrait#}
+    {#                    doc.addImage(img, 'JPEG', 20, 20);#}
+    {#                    doc.save('NOME-DO-PDF.pdf');#}
+    {#                    //Retorna ao CSS normal#}
+    {#                    $('#renderPDF').width(cache_width);#}
+    {#                }#}
+    {#            });#}
+    {#        });#}
+    {#    </script >#}
     <!-- Mirrored from afinda.vn/html/Ogami/shop_order_complete.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 27 Jun 2020 12:00:56 GMT -->
+    <script type="text/javascript" >
+        {% if object.ordered %}
+            let a = [];
+            localStorage.setItem('cart', JSON.stringify(a));
+        {% endif %}
+    </script >
     </body >
     </html >
 {% endblock %}

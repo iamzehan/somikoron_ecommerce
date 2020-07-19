@@ -22,28 +22,32 @@
                         <div class="col-12 col-md-12 col-lg-12 col-xl-12 order-1 order-md-2" >
                             <div class="website-search" >
                                 <div class="row no-gutters" >
-                                    <div class="col-0 col-md-0 col-lg-4 col-xl-3" style="background-color: #cb241b; color: white" >
+                                    <div class="col-0 col-md-0 col-lg-4 col-xl-3" >
                                         <div class="filter-search" >
                                             <div class="categories-select d-flex align-items-center justify-content-around" >
                                                 <span >All Categories</span ><i class="arrow_carrot-down" ></i ></div >
                                             <div class="categories-select_box" >
                                                 <ul >
-                                                    <li >Fruit & Nut Gifts</li >
-                                                    <li >Fresh Berries</li >
-                                                    <li >Ocean Foods</li >
-                                                    <li >Butter & Eggs</li >
-                                                    <li >Ocean Foods</li >
+                                                    {% for cat in categories %}
+                                                        <li >{{ cat.category_name }}</li >
+                                                    {% endfor %}
                                                 </ul >
                                             </div >
                                         </div >
                                     </div >
                                     <div class="col-8 col-md-8 col-lg-5 col-xl-7" >
                                         <div class="search-input" >
-                                            <input class="no-round-input no-border" type="text" placeholder="What do you need" >
+                                            <form id="search-form" action="{% url 'search:searchitems' %}" method="GET"
+                                                  value="{{ request.GET.q }}" >
+                                                <input class="no-round-input no-border" type="text" name="q" value="{{ request.GET.q }}"
+                                                       placeholder="What do you need" />
+                                            </form >
                                         </div >
                                     </div >
                                     <div class="col-4 col-md-4 col-lg-3 col-xl-2" >
-                                        <button class="no-round-btn" >Search</button >
+                                        <button class="no-round-btn coffee" type="submit" name="submit" value="Search"
+                                                onclick="document.getElementById('search-form').submit();" >Search
+                                        </button >
                                     </div >
                                 </div >
                             </div >
@@ -75,9 +79,10 @@
                                 </div >
                                 <div class="department_bottom" >
                                     <ul >
-                                        {% for subcat in sub_categories %}
-                                            <li ><a class="department-link" href="{{ subcat.get_absolute_url }}" ><i
-                                                    class="icon-{{ forloop.counter }}" > </i >{{ subcat.sub_category_name }}</a >
+                                        {% for cat in categories %}
+                                            <li ><a class="department-link" href="{{ cat.get_absolute_url }}" >
+                                                <img style="width: 25px" src="{% static 'assets/images/custom_icons/' %}{{ cat.category_id }}.png" alt="" >
+                                                {{ cat.category_name }}</a >
                                             </li >
                                         {% endfor %}
                                     </ul >
@@ -87,14 +92,14 @@
                                 <div class="tag_top mini-tab-title underline" >
                                     <h2 class="title" >Product tag</h2 >
                                 </div >
-                                <div class="tag_bottom" ><a class="tag-btn" href="shop_grid%2blist_3col.html" >organic</a ><a class="tag-btn"
-                                                                                                                              href="shop_grid%2blist_3col.html" >vegatable</a ><a
-                                        class="tag-btn" href="shop_grid%2blist_3col.html" >fruits</a ><a class="tag-btn"
-                                                                                                         href="shop_grid%2blist_3col.html" >fresh
-                                                                                                                                            meat</a ><a
-                                        class="tag-btn" href="shop_grid%2blist_3col.html" >fastfood</a ><a class="tag-btn"
-                                                                                                           href="shop_grid%2blist_3col.html" >natural</a >
-                                </div >
+{#                                <div class="tag_bottom" ><a class="tag-btn" href="shop_grid%2blist_3col.html" >organic</a ><a class="tag-btn"#}
+{#                                                                                                                              href="shop_grid%2blist_3col.html" >vegatable</a ><a#}
+{#                                        class="tag-btn" href="shop_grid%2blist_3col.html" >fruits</a ><a class="tag-btn"#}
+{#                                                                                                         href="shop_grid%2blist_3col.html" >fresh#}
+{#                                                                                                                                            meat</a ><a#}
+{#                                        class="tag-btn" href="shop_grid%2blist_3col.html" >fastfood</a ><a class="tag-btn"#}
+{#                                                                                                           href="shop_grid%2blist_3col.html" >natural</a >#}
+{#                                </div >#}
                             </div >
                         </div >
                         <div class="filter-sidebar--background" style="display: none" ></div >
@@ -117,7 +122,7 @@
                                                 {#                            <div class="big-img_block"><img src="{%  static 'assets/images/shop/zoom_img_3.png' %}" alt="product image"></div>#}
                                             {% endfor %}
                                         </div >
-                                        <div class="slide-img" style="max-height: max-content !important;">
+                                        <div class="slide-img" style="max-height: max-content !important;" >
                                             {% for  image in object.item.images.all %}
                                                 <div class="slide-img_block" ><img src="{{ image.image.url }}" alt="product image" ></div >
                                                 {#                        <div class="slide-img_block"><img src="{%  static 'assets/images/shop/zoom_img_2.png' %}" alt="product image"></div>#}
@@ -128,8 +133,7 @@
                                     <div class="img_control" ></div >
                                 </div >
                                 <div class="col-12 col-lg-6" >
-                                    <div class="shop-detail_info card" >
-                                        <h5 class="product-type color-type" >Oranges</h5 >
+                                    <div class="shop-detail_info card cartable" >
                                         <h2 class="product-name" >{{ object.item.title }}</h2 >
                                         <p class="product-describe" >{{ object.item.description|truncatewords:25 }} <a class="product-more"
                                                                                                                        href="#tab-1" >View more <i
@@ -169,8 +173,14 @@
                                             <input class="no-round-input" id="quantity" type="number" min="0" value="1" >{{ object.unit }}
                                         </div >
                                         <div class="product-select" style="text-align: center" >
-                                            <a class="add-to-cart normal-btn outline" href="{{ object.item.get_add_to_cart_url }}"
-                                               style="width: 100%" >Add to Cart</a >
+                                            <img hidden class="product__image" src="{{ object.item.images.all.0.image.url }}" alt="" >
+                                            <p hidden class="product__name" >{{ object.item.pk }}</p >
+                                            <p hidden class="product__title" >{{ object.item.title }}</p >
+                                            <p hidden class="product__price" >{{ object.get_discounted_price }}</p >
+                                            <button class="add-to-cart normal-btn outline" data-action="ADD_TO_CART" name="btn{{ object.item.pk }}" style="width: 100%" >Add
+                                                                                                                                                  to
+                                                                                                                                                  cart
+                                            </button >
                                         </div >
                                         <div class="product-share" >
                                             <h5 >Share link:</h5 ><a href="#" ><i class="fab fa-facebook-f" > </i ></a ><a href="#" ><i
@@ -222,10 +232,10 @@
                                                                                 <th >Size</th >
                                                                                 <td class="product_size" >{{ object.size }}</td >
                                                                             </tr >
-{#                                                                            <tr >#}
-{#                                                                                <th >Stock Quantity</th >#}
-{#                                                                                <td class="product_dimensions" >{{ object.stock_quantity }}</td >#}
-{#                                                                            </tr >#}
+                                                                            {#                                                                            <tr >#}
+                                                                            {#                                                                                <th >Stock Quantity</th >#}
+                                                                            {#                                                                                <td class="product_dimensions" >{{ object.stock_quantity }}</td >#}
+                                                                            {#                                                                            </tr >#}
                                                                             <tr >
                                                                                 <th >Additional Info</th >
                                                                                 <td class="product_color" >{{ object.additional_info }}</td >
@@ -338,28 +348,13 @@
             </div >
         </div >
         <!-- End shop layout-->
-        <div class="partner" >
-            <div class="container" >
-                <div class="partner_block d-flex justify-content-between" data-slick="{&quot;slidesToShow&quot;: 6}" >
-                    <div class="partner--logo" href="#" ><a href="#" ><img src="{% static 'assets/images/partner/partner_01.png' %}"
-                                                                           alt="partner logo" ></a ></div >
-                    <div class="partner--logo" href="#" ><a href="#" ><img src="{% static 'assets/images/partner/partner_02.png' %}"
-                                                                           alt="partner logo" ></a ></div >
-                    <div class="partner--logo" href="#" ><a href="#" ><img src="{% static 'assets/images/partner/partner_01.png' %}"
-                                                                           alt="partner logo" ></a ></div >
-                    <div class="partner--logo" href="#" ><a href="#" ><img src="{% static 'assets/images/partner/partner_02.png' %}"
-                                                                           alt="partner logo" ></a ></div >
-                    <div class="partner--logo" href="#" ><a href="#" ><img src="{% static 'assets/images/partner/partner_01.png' %}"
-                                                                           alt="partner logo" ></a ></div >
-                    <div class="partner--logo" href="#" ><a href="#" ><img src="{% static 'assets/images/partner/partner_02.png' %}"
-                                                                           alt="partner logo" ></a ></div >
-                    <div class="partner--logo" href="#" ><a href="#" ><img src="{% static 'assets/images/partner/partner_01.png' %}"
-                                                                           alt="partner logo" ></a ></div >
-                </div >
-            </div >
-        </div >
-        <!-- End partner-->
+
         <!-- End footer-->
+        <script type="text/javascript" >
+            $(document).ready(function () {
+                document.getElementById('floatcart').style.display = 'block'
+            })
+        </script >
     </div >
     </body >
     <!-- Mirrored from afinda.vn/html/Ogami/shop_detail.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 27 Jun 2020 12:00:56 GMT -->

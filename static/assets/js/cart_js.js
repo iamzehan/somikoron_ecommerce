@@ -187,3 +187,153 @@ addToCartButtonsDOM.forEach(addToCartButtonDOM => {
         }
     });
 });
+
+
+
+    $(document).ready(function () {
+        $("#quickviewbtn").on("click", function(){
+            var pid=$(this).closest('.product-select').children('#demotitle').val();
+            $.ajax({
+                url: '/getquickview/',
+                type: 'POST',
+                data: {
+                    'productid': pid,
+                },
+                success: function (data) {
+
+                }
+            });
+           `<div class="modal-content" >
+                <div class="modal-header" style="text-align: center; padding: 5px" >
+                    <div class="text-center" style="float: left; " >
+                        <h6 class="modal-title" id="exampleModalLongTitle" >Brahman Bull-051</h6 >
+                    </div >
+                    <div style="float: right" >
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
+                            <span aria-hidden="true" >&times;</span >
+                        </button >
+                    </div >
+                </div >
+                <div class="modal-body" >
+                    <div class="shop-detail" >
+                        <div class="row" style="height: 530px;" >
+                            <div class="col-12 col-lg-6" >
+                                <div class="shop-detail_img" >
+                                    <button class="round-icon-btn" id="zoom-btn" ><i class="icon_zoom-in_alt" ></i ></button >
+                                    <div class="big-img" >
+                                        {#                                    {% for  image in object.item.images.all %}#}
+                                        <div class="big-img_block" ><img src="{% static 'assets/images/special_offer/c7.jpg' %}" alt="product image" >
+                                        </div >
+                                        <div class="big-img_block" ><img src="{% static 'assets/images/special_offer/c9.jpg' %}" alt="product image" >
+                                        </div >
+                                        <div class="big-img_block" ><img src="{% static 'assets/images/special_offer/c8.jpg' %}" alt="product image" >
+                                        </div >
+                                        {#                                    {% endfor %}#}
+                                    </div >
+                                    <div class="slide-img" >
+                                        {#                                    {% for  image in object.item.images.all %}#}
+                                        <div class="slide-img_block" ><img src="{% static 'assets/images/special_offer/c7.jpg' %}"
+                                                                           alt="product image" >
+                                        </div >
+                                        <div class="slide-img_block" ><img src="{% static 'assets/images/special_offer/c9.jpg' %}"
+                                                                           alt="product image" >
+                                        </div >
+                                        <div class="slide-img_block" ><img src="{% static 'assets/images/special_offer/c8.jpg' %}"
+                                                                           alt="product image" >
+                                        </div >
+                                        {#                                    {% endfor %}#}
+                                    </div >
+                                </div >
+                                <div class="img_control" ></div >
+                            </div >
+                            <div class="col-12 col-lg-6" >
+                                <div class="shop-detail_info " >
+                                    {#                                <h5 class="product-type color-type" >Oranges</h5 >#}
+                                    {#                                <h2 class="product-name" >{{ object.item.title }}</h2 >#}
+                                    {#                                <p class="product-describe" >{{ object.item.description|truncatewords:25 }} <a class="product-more"#}
+                                    {#                                                                                                               href="#tab-1" >View more <i#}
+                                    {#                                        class="arrow_carrot-2right" ></i ></a ></p >#}
+                                    <p class="delivery-status" >Free delivery</p >
+                                    <div >
+                                        <p class="product-describe" >
+                                        <div >
+                                            <div style="float: left" >Breed:</div >
+                                            <div style="float: right" >{{ cattle.cattleinfo.Breed }}Brahman</div >
+                                        </div >
+                                        <br ><br >
+                                        <div >
+                                            <div style="float: left" >Height:</div >
+                                            <div style="float: right" >{{ cattle.cattleinfo.height }}6.2 fit</div >
+                                        </div >
+                                        <br ><br >
+                                        <div >
+                                            <div style="float: left" >Live Weight:</div >
+                                            <div style="float: right" >{{ cattle.cattleinfo.live_weight }}650 KG</div >
+                                        </div >
+                                        <br ><br >
+                                        <div >
+                                            <div style="float: left" >Expected Weight:</div >
+                                            <div style="float: right" >{{ cattle.cattleinfo.expected_weight }}680 KG</div >
+                                        </div >
+                                        <br >
+                                        </p >
+                                    </div >
+                                    <p style="font-size: 14px" >
+                                        Brahmans are intermediate in size among beef breeds. Bulls will generally weigh from 1600 to 2200 pounds and
+                                        cows from 1000 to 1400 pounds in average condition. The calves are small at birth, weighing 60 to 65 pounds,
+                                        but grow very rapidly and wean at weights comparable to other breeds.
+                                    </p >
+                                    <div class="price-rate" >
+                                        <h3 class="product-price" >
+                                            <del >Tk 150000</del >
+                                            Tk 140000
+                                        </h3 >
+                                        <h5 class="product-rated" ><i class="icon_star" ></i ><i class="icon_star" ></i ><i
+                                                class="icon_star" ></i ><i class="icon_star" ></i ><i
+                                                class="icon_star-half" ></i ><span >(15)</span ></h5 >
+                                    </div >
+                                    {#                                    <div class="color-select" >#}
+                                    {#                                        <h5 >Select Color:</h5 ><a class="color bg-danger" href="#" ></a ><a class="color bg-success"#}
+                                    {#                                                                                                             href="#" ></a ><a#}
+                                    {#                                            class="color bg-info" href="#" ></a >#}
+                                    {#                                    </div >#}
+                                    <div class="quantity-select" style="margin-bottom: 20px" >
+                                        <label for="quantity" >Quatity:</label >
+                                        <input class="no-round-input" id="quantity" type="number" min="0" value="1" >{{ object.unit }}
+                                    </div >
+                                    <div class="product-select" style="text-align: center" >
+                                        <a class="add-to-cart normal-btn outline" href="{{ object.item.get_add_to_cart_url }}" style="width: 100%" >Add
+                                                                                                                                                    to
+                                                                                                                                                    Cart</a >
+                                        {#                                    <br ><a href="{{ object.item.get_remove_from_cart_url }}" > remove</a >#}
+                                    </div >
+                                </div >
+                            </div >
+                        </div >
+                    </div >
+                </div >
+                <div class="modal-footer" style="padding: 7px" >
+                    <div class="product-share text-left" style="float: left; width: 85%" >
+                        <span >Share link:</span >&nbsp; &nbsp;
+                        <a href="#" ><i class="fab fa-facebook-f" > </i ></a >&nbsp;&nbsp;
+                        <a href="#" ><i class="fab fa-twitter" ></i ></a >&nbsp;&nbsp;
+                        <a href="#" ><i class="fab fa-invision" > </i ></a >&nbsp;&nbsp;
+                        <a href="#" ><i class="fab fa-pinterest-p" ></i ></a >&nbsp;&nbsp;
+                    </div >
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button >
+                    {#                <button type="button" class="btn btn-primary" >Save changes</button >#}
+                </div >
+            </div >`
+            $("#quickViewModal").modal("show");
+        });
+
+
+        $("#quickViewModal").on('shown.bs.modal', function () {
+            {
+                alert('The modal is fully shown.');
+
+            }
+            $('.slide-img, .big-img').slick('setPosition').slick();
+
+        });
+    });

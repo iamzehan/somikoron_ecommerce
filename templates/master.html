@@ -8,6 +8,7 @@
     <meta name="keywords"
           content="blog, business, clean, clear, cooporate, creative, design web, flat, marketing, minimal, portfolio, shop, shopping, unique" >
     <meta name="author" content="MARTECH | Deer Creative Theme" >
+    <link rel="shortcut icon" href="{% static 'assets/images/custom_icons/fav.ico' %}" >
     {#MDB#}
     <!-- Font Awesome -->
     {#    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" >#}
@@ -20,7 +21,7 @@
     {#  slider #}
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/css/swiper.min.css' >
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css' >
-{#    <link rel="stylesheet" href="{% static 'assets/css/slider_style.css' %}" >#}
+    {#    <link rel="stylesheet" href="{% static 'assets/css/slider_style.css' %}" >#}
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" >
     <link rel="stylesheet" href="{% static 'assets/css/adjusted_style.css' %}" >
     <link rel="stylesheet" href="{% static 'assets/css/custom_bootstrap.css' %}" >
@@ -70,7 +71,7 @@
 <script src="{% static 'assets/js/mobile-menu-listener.js' %}" ></script >
 {#<script src="{% static 'assets/js/cart_js.js' %}" ></script >#}
 <!-- ManyChat -->
-<script src="//widget.manychat.com/114667473628110.js" async="async"></script>
+<script src="//widget.manychat.com/114667473628110.js" async="async" ></script >
 
 {% if messages %}
     <div class="alert alert-success alert-dismissible fade show" role="alert" >
@@ -83,18 +84,20 @@
     </div >
 {% endif %}
 {% block qwuickcart %}
-    <div class="asd" >
+    <div class="asd" id="floatcartdiv" >
         <!-- =================================== Float Part start====================== -->
-        <div class="float_cart" onclick="sidebarOPen()" >
+        <div class="float_cart" id="floatcart" onclick="sidebarOPen()" >
             <div class="float_content" style="background-color: rgb(203, 36, 27)" >
                 <div class="float_icon" >
                     <h5 style="color: white" ><i class="fa fa-shopping-cart" aria-hidden="true" ></i >
                     </h5 >
                 </div >
-                <h6 style="color: white; margin-top: -10px; font-size: 12px" ><span >{{ request.user|cart_item_count }}</span > Items</h6 >
+                <h6 style="color: white; margin-top: -10px; font-size: 12px" ><span id="floatingtotalitems" >0</span > Items</h6 >
+                {#                {{ request.user|cart_item_count }}#}
             </div >
             <div class="float_price" style="background-color: rgb(253,240,177)" >
-                <h6 ><span >৳</span > {{ request.user|cart_total_count|stringformat:".0f" }}</h6 >
+                <h6 ><span >৳</span ><span style="font-size: 13px" id="floatcarttotal" >0</span ></h6 >
+                {#                {{ request.user|cart_total_count|stringformat:".0f" }}#}
             </div >
         </div >
         <!-- =================================== Float Part End ====================== -->
@@ -120,17 +123,11 @@
                 </div >
                 <div class="place_order" >
                     <div class="po_btn" >
-                        <button class=" pl_btn" >Place order</button >
+                        <button style="font-size: 15px" class="bt-block pl_btn " id="placeorderbtn" >Place order</button >
                     </div >
-                    {% if cartitems.get_total > 0 %}
-                        <div class="po_btn" >
-                            <button class=" pr_btn" >{{ cartitems.get_total|stringformat:".1f" }}</button >
-                        </div >
-                    {% else %}
-                        <div class="po_btn" >
-                            <button class=" pr_btn" >00</button >
-                        </div >
-                    {% endif %}
+                    <div class="po_btn" >
+                        <button class=" pr_btn" style="font-size: 15px" id="cart_total" >0</button >
+                    </div >
                 </div >
             </div >
             <!-- ===================================== Sidebar Inner row Start=============================== -->
@@ -138,8 +135,15 @@
                 <div class="col-md-12" >
                     <div class="header_selected_product text-left" >
                         <h3 style="font-size: 13px; padding-left: 18px" ><i class="fa fa-shopping-cart"
-                                                                            aria-hidden="true" ></i ><span >{{ request.user|cart_item_count }}</span >
+                                                                            aria-hidden="true" ></i ><span id="cartheadingtotalitems" >0</span >
                             Items Selected</h3 >
+                    </div >
+                </div >
+            </div >
+            <div class="row justify-content-center sidebar_row mb-1" >
+                <div class="col-md-12" >
+                    <div class="text-center " style="background-color: #eace89; padding: 5px 10px" >
+                        <h6 style="color: #000000" >Delivery Charge ৳<span id="deliverycharge" style="" >60</span ></h6 >
                     </div >
                 </div >
             </div >
@@ -147,31 +151,31 @@
                 <div class="col-md-12 col-sm-12 cart" style="overflow-y: scroll; height: 480px" >
                     <table class="table table-borderless" id="carttable" style=" border-collapse: collapse;" >
                         <tbody class="cart" >
-                        {% for item in cartitems.items.all %}
-                            <tr style="width: 300px !important; " >
-                                <td colspan="3" style=" padding-bottom: 0px; width: 300px !important;" >{{ item.item.title|truncatechars:28 }}
-                                    <a style="float: right" >
-                                        <i class="fas fa-trash"
-                                           style="padding-right: 0px !important; font-size: 15px !important; color:#cd0d0d; " ></i >
-                                    </a >
-                                </td >
-                            </tr >
-                            <tr style="border-bottom:1pt solid lightgray;" >
-                                <th scope="col" ><img class="product__image" style="width: 50px;" src="{{ item.item.images.all.0.image.url }}"
-                                                      alt="" ></th >
-                                <th scope="col" style="padding-bottom: 18px; text-align: center" >
-                                    <button class="btn  btn-small" style="padding: 0px 5px; background-color: #c3e6cb" data-action="INCREASE_ITEM" >
-                                        &plus;
-                                    </button >
-                                    <span class="cart__item__quantity font-weight-bold" >55</span >
-                                    <button class="btn  btn-small" style="padding: 0px 5px;background-color: #fadc8c " data-action="DECREASE_ITEM" >
-                                        &minus;
-                                    </button >
-                                </th >
-                                <th scope="col" style="text-align: right; padding-bottom: 22px" >Tk. <span class="cart__item__price" >220</span >
-                                </th >
-                            </tr >
-                        {% endfor %}
+                        {#                        {% for item in cartitems.items.all %}#}
+                        {#                            <tr style="width: 300px !important; " >#}
+                        {#                                <td colspan="3" style=" padding-bottom: 0px; width: 300px !important;" >{{ item.item.title|truncatechars:28 }}#}
+                        {#                                    <a style="float: right" >#}
+                        {#                                        <i class="fas fa-trash"#}
+                        {#                                           style="padding-right: 0px !important; font-size: 15px !important; color:#cd0d0d; " ></i >#}
+                        {#                                    </a >#}
+                        {#                                </td >#}
+                        {#                            </tr >#}
+                        {#                            <tr style="border-bottom:1pt solid lightgray;" >#}
+                        {#                                <th scope="col" ><img class="product__image" style="width: 50px;" src="{{ item.item.images.all.0.image.url }}"#}
+                        {#                                                      alt="" ></th >#}
+                        {#                                <th scope="col" style="padding-bottom: 18px; text-align: center" >#}
+                        {#                                    <button class="btn  btn-small" style="padding: 0px 5px; background-color: #c3e6cb" data-action="INCREASE_ITEM" >#}
+                        {#                                        &plus;#}
+                        {#                                    </button >#}
+                        {#                                    <span class="cart__item__quantity font-weight-bold" >55</span >#}
+                        {#                                    <button class="btn  btn-small" style="padding: 0px 5px;background-color: #fadc8c " data-action="DECREASE_ITEM" >#}
+                        {#                                        &minus;#}
+                        {#                                    </button >#}
+                        {#                                </th >#}
+                        {#                                <th scope="col" style="text-align: right; padding-bottom: 22px" >Tk. <span class="cart__item__price" >220</span >#}
+                        {#                                </th >#}
+                        {#                            </tr >#}
+                        {#                        {% endfor %}#}
                         </tbody >
                     </table >
                     {#                    {% for item in cartitems.items.all %}#}
@@ -226,10 +230,9 @@
             'use strict';
 
             let cart = (JSON.parse(localStorage.getItem('cart')) || []);
-
             const cartDOM = document.querySelector('.cart');
             const addToCartButtonsDOM = document.querySelectorAll('[data-action="ADD_TO_CART"]');
-
+            var carttotal = 0;
             if (cart.length > 0) {
                 cart.forEach(cartItem => {
                     const product = cartItem;
@@ -245,11 +248,12 @@
                     {#        <button class="btn btn--danger btn--small" data-action="REMOVE_ITEM">&times;</button>#}
                     {#      </div>#}
                     {#    `);#}
+                    var itemtotal = product.price * product.quantity;
                     var tablenew = document.getElementById('carttable');
                     var txt = `
                             <tr id="titlerow${product.name}"  style="width: 300px !important; " >
                                 <td colspan="3" style=" padding-bottom: 0px; width: 300px !important;" >${product.title}
-                                    <a style="float: right" id="removeitem${product.name}">
+                                    <a style="float: right" id="removeitem${product.name}" data-action="REMOVE_ITEM">
                                         <i class="fas fa-trash"
                                            style="padding-right: 0px !important; font-size: 15px !important; color:#cd0d0d; " ></i >
                                     </a >
@@ -257,85 +261,158 @@
                             </tr >
                             <tr class="cart__item" style="border-bottom:1pt solid lightgray;">
                                 <th scope="col" ><img style="width: 50px;" class="cart__item__image" src="${product.image}" alt="${product.image}" ></th >
-                                <th scope="col" style="padding-bottom: 18px; text-align: center">
+                                <th scope="col" style="padding-bottom: 15px; text-align: center">
                                     <button class="btn  btn-small" style="padding: 0px 5px; background-color: #c3e6cb" data-action="INCREASE_ITEM" >&plus;</button >
                                     <span class="cart__item__quantity font-weight-bold" >${product.quantity}</span >
                                     <button class="btn  btn-small${(product.quantity === 1 ? ' btn--danger' : '')}" style="padding: 0px 5px;background-color: #fadc8c " data-action="DECREASE_ITEM">&minus;</button>
                                     <p hidden class="cart__item__name">${product.name}</p>
                                 </th >
-                                <th scope="col" style="text-align: right; padding-bottom: 22px">Tk. <span class="cart__item__price">${product.price}</span></th >
+                                <th scope="col" style="text-align: right; padding-bottom: 22px">Tk. <span class="cart__item__price">${itemtotal}</span></th >
                             </tr >
                           `;
                     $(tablenew).find('tbody').append(txt);
-                    addToCartButtonsDOM.forEach(addToCartButtonDOM => {
-                        const productDOM = addToCartButtonDOM.closest(".cartable");
+                    carttotal = parseFloat(document.getElementById('cart_total').innerText)
+                    document.getElementById('cart_total').innerHTML = carttotal + (product.price * product.quantity);
+                    document.getElementById('floatcarttotal').innerHTML = carttotal + (product.price * product.quantity);
+                    document.getElementById('floatingtotalitems').innerHTML = parseFloat(document.getElementById('floatingtotalitems').innerHTML) + 1;
+                    document.getElementById('cartheadingtotalitems').innerHTML = parseFloat(document.getElementById('cartheadingtotalitems').innerHTML) + 1;
 
-                        try {
-                            var proname = productDOM.querySelector('.product__name').innerText;
-                            if (proname === product.name) {
-                                addToCartButtonDOM.innerText = 'In Cart';
-                                addToCartButtonDOM.disabled = true;
+                    const cartItemsDOM = cartDOM.querySelectorAll('.cart__item');
+                    cartItemsDOM.forEach(cartItemDOM => {
+                        if (cartItemDOM.querySelector('.cart__item__name').innerText === product.name) {
+                            cartItemDOM.querySelector('[data-action="INCREASE_ITEM"]').addEventListener('click', () => {
+                                cart.forEach(cartItem => {
+                                    if (cartItem.name === product.name) {
+                                        cartItemDOM.querySelector('.cart__item__quantity').innerText = ++cartItem.quantity;
+                                        cartItemDOM.querySelector('.cart__item__price').innerText = (cartItemDOM.querySelector('.cart__item__quantity').innerText) * cartItem.price;
+                                        cartItemDOM.querySelector('[data-action="DECREASE_ITEM"]').classList.remove('btn--danger');
+                                        carttotal = parseFloat(document.getElementById('cart_total').innerHTML);
+                                        document.getElementById('cart_total').innerHTML = carttotal + parseFloat(product.price);
+                                        document.getElementById('floatcarttotal').innerHTML = carttotal + parseFloat(product.price);
+                                        localStorage.setItem('cart', JSON.stringify(cart));
 
-                                const cartItemsDOM = cartDOM.querySelectorAll('.cart');
-                                cartItemsDOM.forEach(cartItemDOM => {
-                                    if (cartItemDOM.querySelector('.cart__item__name').innerText === product.name) {
-
-                                        cartItemDOM.querySelector('[data-action="INCREASE_ITEM"]').addEventListener('click', () => {
-                                            cart.forEach(cartItem => {
-                                                if (cartItem.name === product.name) {
-                                                    cartItemDOM.querySelector('.cart__item__quantity').innerText = ++cartItem.quantity;
-                                                    cartItemDOM.querySelector('[data-action="DECREASE_ITEM"]').classList.remove('btn--danger');
-                                                    localStorage.setItem('cart', JSON.stringify(cart));
-                                                }
-                                            });
-                                        });
-
-                                        cartItemDOM.querySelector('[data-action="DECREASE_ITEM"]').addEventListener('click', () => {
-                                            cart.forEach(cartItem => {
-                                                if (cartItem.name === product.name) {
-                                                    if (cartItem.quantity > 1) {
-                                                        cartItemDOM.querySelector('.cart__item__quantity').innerText = --cartItem.quantity;
-                                                        localStorage.setItem('cart', JSON.stringify(cart));
-                                                    } else {
-                                                        cartItemDOM.classList.add('cart__item--removed');
-                                                        setTimeout(() => cartItemDOM.remove(), 250);
-                                                        document.getElementById('titlerow' + product.name).remove()
-                                                        cart = cart.filter(cartItem => cartItem.name !== product.name);
-                                                        localStorage.setItem('cart', JSON.stringify(cart));
-                                                        addToCartButtonDOM.innerText = 'Add To Cart';
-                                                        addToCartButtonDOM.disabled = false;
-                                                    }
-
-                                                    if (cartItem.quantity === 1) {
-                                                        cartItemDOM.querySelector('[data-action="DECREASE_ITEM"]').classList.add('btn--danger');
-                                                    }
-                                                }
-                                            });
-                                        });
-
-                                        cartItemDOM.querySelector('[data-action="REMOVE_ITEM"]').addEventListener('click', () => {
-                                            cart.forEach(cartItem => {
-                                                if (cartItem.name === product.name) {
-                                                    cartItemDOM.classList.add('cart__item--removed');
-                                                    setTimeout(() => cartItemDOM.remove(), 250);
-                                                    document.getElementById('titlerow' + product.name).remove()
-                                                    cart = cart.filter(cartItem => cartItem.name !== product.name);
-                                                    localStorage.setItem('cart', JSON.stringify(cart));
-                                                    addToCartButtonDOM.innerText = 'Add To Cart';
-                                                    addToCartButtonDOM.disabled = false;
-                                                }
-                                            });
-                                        });
-
+                                        if (document.getElementById('cart_total').innerText >= 1000) {
+                                            document.getElementById('deliverycharge').innerText = 40;
+                                        } else {
+                                            document.getElementById('deliverycharge').innerText = 60;
+                                        }
                                     }
                                 });
-                            }
-                        } catch (e) {
+                            });
+
+                            cartItemDOM.querySelector('[data-action="DECREASE_ITEM"]').addEventListener('click', () => {
+                                cart.forEach(cartItem => {
+                                    if (cartItem.name === product.name) {
+                                        if (cartItem.quantity > 1) {
+                                            cartItemDOM.querySelector('.cart__item__quantity').innerText = --cartItem.quantity;
+                                            cartItemDOM.querySelector('.cart__item__price').innerText = (cartItemDOM.querySelector('.cart__item__quantity').innerText) * cartItem.price
+                                            carttotal = parseFloat(document.getElementById('cart_total').innerHTML);
+                                            document.getElementById('cart_total').innerHTML = carttotal - parseFloat(product.price);
+                                            document.getElementById('floatcarttotal').innerHTML = carttotal - parseFloat(product.price);
+                                            localStorage.setItem('cart', JSON.stringify(cart));
+
+                                            if (document.getElementById('cart_total').innerText >= 1000) {
+                                                document.getElementById('deliverycharge').innerText = 40;
+                                            } else {
+                                                document.getElementById('deliverycharge').innerText = 60;
+                                            }
+                                        } else {
+                                            try {
+                                                cartItemDOM.classList.add('cart__item--removed');
+                                                setTimeout(() => cartItemDOM.remove(), 250);
+                                                document.getElementById('titlerow' + cartItem.name).remove()
+                                                cart = cart.filter(cartItem => cartItem.name !== product.name);
+                                                carttotal = parseFloat(document.getElementById('cart_total').innerHTML);
+                                                document.getElementById('cart_total').innerHTML = carttotal - parseFloat(product.price);
+                                                document.getElementById('floatcarttotal').innerHTML = carttotal - parseFloat(product.price);
+                                                document.getElementById('floatingtotalitems').innerHTML = parseFloat(document.getElementById('floatingtotalitems').innerHTML) - 1;
+                                                document.getElementById('cartheadingtotalitems').innerHTML = parseFloat(document.getElementById('cartheadingtotalitems').innerHTML) - 1;
+                                                localStorage.setItem('cart', JSON.stringify(cart));
+                                                try {
+                                                    var btn = document.getElementsByName('btn' + product.name);
+                                                    btn.forEach(a => {
+                                                        a.innerText = 'Add to Cart';
+                                                        a.disabled = false;
+                                                    });
+                                                } catch (e) {
+
+                                                }
+                                                if (document.getElementById('cart_total').innerText >= 1000) {
+                                                    document.getElementById('deliverycharge').innerText = 40;
+                                                } else {
+                                                    document.getElementById('deliverycharge').innerText = 60;
+                                                }
+                                            } catch (e) {
+                                                alert(e);
+                                            }
+                                        }
+
+                                        if (cartItem.quantity === 1) {
+                                            cartItemDOM.querySelector('[data-action="DECREASE_ITEM"]').classList.add('btn--danger');
+                                        }
+                                    }
+                                });
+                            });
+                            document.getElementById('titlerow' + product.name).querySelector('[data-action="REMOVE_ITEM"]').addEventListener('click', () => {
+                                cart.forEach(cartItem => {
+                                    if (cartItem.name === product.name) {
+                                        cartItemDOM.classList.add('cart__item--removed');
+                                        setTimeout(() => cartItemDOM.remove(), 250);
+                                        document.getElementById('titlerow' + product.name).remove();
+                                        carttotal = parseFloat(document.getElementById('cart_total').innerHTML);
+                                        document.getElementById('cart_total').innerHTML = carttotal - parseFloat(product.price) * cartItem.quantity;
+                                        document.getElementById('floatcarttotal').innerHTML = carttotal - parseFloat(product.price) * cartItem.quantity;
+                                        document.getElementById('floatingtotalitems').innerHTML = parseFloat(document.getElementById('floatingtotalitems').innerHTML) - 1;
+                                        document.getElementById('cartheadingtotalitems').innerHTML = parseFloat(document.getElementById('cartheadingtotalitems').innerHTML) - 1;
+                                        cart = cart.filter(cartItem => cartItem.name !== product.name);
+                                        localStorage.setItem('cart', JSON.stringify(cart));
+                                        try {
+                                            var btn = document.getElementsByName('btn' + product.name);
+                                            btn.forEach(a => {
+                                                alert(a.innerText);
+                                                a.innerText = 'Add to Cart';
+                                                a.disabled = false;
+                                            });
+                                        } catch (e) {
+                                        }
+                                        if (document.getElementById('cart_total').innerText >= 1000) {
+                                            document.getElementById('deliverycharge').innerText = 40;
+                                        } else {
+                                            document.getElementById('deliverycharge').innerText = 60;
+                                        }
+                                    }
+                                });
+                            });
 
                         }
                     });
+                    addToCartButtonsDOM.forEach(addToCartButtonDOM => {
+                        const productDOM = addToCartButtonDOM.closest(".cartable");
+                        var pronameDom = '';
+                        try {
+                            pronameDom = productDOM.querySelector('.product__name').innerText;
+                        } catch (e) {
+                            pronameDom = '';
+                            {#alert(e);#}
+                        }
+                        {#var proname =cartDOM.querySelector('.cart__item__name').innerText;#}
+                        {#alert(pronameDom);#}
+
+                        if (pronameDom === cartItem.name) {
+                            addToCartButtonDOM.innerText = 'In Cart';
+                            addToCartButtonDOM.disabled = true;
+
+                        }
+
+
+                    });
 
                 });
+                if (document.getElementById('cart_total').innerText >= 1000) {
+                    document.getElementById('deliverycharge').innerText = 40;
+                } else {
+                    document.getElementById('deliverycharge').innerText = 60;
+                }
             }
 
             addToCartButtonsDOM.forEach(addToCartButtonDOM => {
@@ -364,7 +441,7 @@
                             </tr >
                             <tr class="cart__item" style="border-bottom:1pt solid lightgray;">
                                 <th scope="col" ><img style="width: 50px;" class="cart__item__image" src="${product.image}" alt="${product.image}" ></th >
-                                <th scope="col" style="padding-bottom: 18px; text-align: center">
+                                <th scope="col" style="padding-bottom: 15px; text-align: center">
                                     <button class="btn  btn-small" style="padding: 0px 5px; background-color: #c3e6cb" data-action="INCREASE_ITEM" >&plus;</button >
                                     <span class="cart__item__quantity font-weight-bold" >${product.quantity}</span >
                                     <button class="btn  btn-small${(product.quantity === 1 ? ' btn--danger' : '')}" style="padding: 0px 5px;background-color: #fadc8c " data-action="DECREASE_ITEM">&minus;</button>
@@ -375,9 +452,20 @@
                           `;
                         $(table).find('tbody').append(txt);
                         cart.push(product);
+                        carttotal = parseFloat(document.getElementById('cart_total').innerHTML);
+                        document.getElementById('cart_total').innerHTML = carttotal + parseFloat(product.price * product.quantity);
+                        document.getElementById('floatcarttotal').innerHTML = carttotal + parseFloat(product.price * product.quantity);
+                        document.getElementById('floatingtotalitems').innerHTML = parseFloat(document.getElementById('floatingtotalitems').innerHTML) + 1;
+                        document.getElementById('cartheadingtotalitems').innerHTML = parseFloat(document.getElementById('cartheadingtotalitems').innerHTML) + 1;
                         localStorage.setItem('cart', JSON.stringify(cart));
                         addToCartButtonDOM.innerText = 'In Cart';
                         addToCartButtonDOM.disabled = true;
+
+                        if (document.getElementById('cart_total').innerText >= 1000) {
+                            document.getElementById('deliverycharge').innerText = 40;
+                        } else {
+                            document.getElementById('deliverycharge').innerText = 60;
+                        }
 
                         const cartItemsDOM = cartDOM.querySelectorAll('.cart__item');
                         cartItemsDOM.forEach(cartItemDOM => {
@@ -388,7 +476,17 @@
                                         if (cartItem.name === product.name) {
                                             cartItemDOM.querySelector('.cart__item__quantity').innerText = ++cartItem.quantity;
                                             cartItemDOM.querySelector('[data-action="DECREASE_ITEM"]').classList.remove('btn--danger');
+                                            carttotal = parseFloat(document.getElementById('cart_total').innerHTML);
+                                            document.getElementById('cart_total').innerHTML = carttotal + parseFloat(product.price);
+                                            document.getElementById('floatcarttotal').innerHTML = carttotal + parseFloat(product.price);
+                                            cartItemDOM.querySelector('.cart__item__price').innerText = (cartItemDOM.querySelector('.cart__item__quantity').innerText) * cartItem.price
                                             localStorage.setItem('cart', JSON.stringify(cart));
+
+                                            if (document.getElementById('cart_total').innerText >= 1000) {
+                                                document.getElementById('deliverycharge').innerText = 40;
+                                            } else {
+                                                document.getElementById('deliverycharge').innerText = 60;
+                                            }
                                         }
                                     });
                                 });
@@ -398,15 +496,36 @@
                                         if (cartItem.name === product.name) {
                                             if (cartItem.quantity > 1) {
                                                 cartItemDOM.querySelector('.cart__item__quantity').innerText = --cartItem.quantity;
+                                                cartItemDOM.querySelector('.cart__item__price').innerText = (cartItemDOM.querySelector('.cart__item__quantity').innerText) * cartItem.price
+                                                carttotal = parseFloat(document.getElementById('cart_total').innerHTML);
+                                                document.getElementById('cart_total').innerHTML = carttotal - parseFloat(product.price);
+                                                document.getElementById('floatcarttotal').innerHTML = carttotal - parseFloat(product.price);
                                                 localStorage.setItem('cart', JSON.stringify(cart));
+
+                                                if (document.getElementById('cart_total').innerText >= 1000) {
+                                                    document.getElementById('deliverycharge').innerText = 40;
+                                                } else {
+                                                    document.getElementById('deliverycharge').innerText = 60;
+                                                }
                                             } else {
                                                 cartItemDOM.classList.add('cart__item--removed');
                                                 setTimeout(() => cartItemDOM.remove(), 250);
                                                 setTimeout(() => document.getElementById('titlerow' + product.name).remove(), 250);
                                                 cart = cart.filter(cartItem => cartItem.name !== product.name);
+                                                carttotal = parseFloat(document.getElementById('cart_total').innerHTML);
+                                                document.getElementById('cart_total').innerHTML = carttotal - parseFloat(product.price);
+                                                document.getElementById('floatcarttotal').innerHTML = carttotal - parseFloat(product.price);
+                                                document.getElementById('floatingtotalitems').innerHTML = parseFloat(document.getElementById('floatingtotalitems').innerHTML) - 1;
+                                                document.getElementById('cartheadingtotalitems').innerHTML = parseFloat(document.getElementById('cartheadingtotalitems').innerHTML) - 1;
                                                 localStorage.setItem('cart', JSON.stringify(cart));
                                                 addToCartButtonDOM.innerText = 'Add To Cart';
                                                 addToCartButtonDOM.disabled = false;
+
+                                                if (document.getElementById('cart_total').innerText >= 1000) {
+                                                    document.getElementById('deliverycharge').innerText = 40;
+                                                } else {
+                                                    document.getElementById('deliverycharge').innerText = 60;
+                                                }
                                             }
 
                                             if (cartItem.quantity === 1) {
@@ -422,10 +541,21 @@
                                             cartItemDOM.classList.add('cart__item--removed');
                                             setTimeout(() => cartItemDOM.remove(), 250);
                                             setTimeout(() => document.getElementById('titlerow' + product.name).remove(), 250);
+                                            carttotal = parseFloat(document.getElementById('cart_total').innerHTML);
+                                            document.getElementById('cart_total').innerHTML = carttotal - parseFloat(product.price) * product.quantity;
+                                            document.getElementById('floatcarttotal').innerHTML = carttotal - parseFloat(product.price) * product.quantity;
+                                            document.getElementById('floatingtotalitems').innerHTML = parseFloat(document.getElementById('floatingtotalitems').innerHTML) - 1;
+                                            document.getElementById('cartheadingtotalitems').innerHTML = parseFloat(document.getElementById('cartheadingtotalitems').innerHTML) - 1;
                                             cart = cart.filter(cartItem => cartItem.name !== product.name);
                                             localStorage.setItem('cart', JSON.stringify(cart));
                                             addToCartButtonDOM.innerText = 'Add To Cart';
                                             addToCartButtonDOM.disabled = false;
+
+                                            if (document.getElementById('cart_total').innerText >= 1000) {
+                                                document.getElementById('deliverycharge').innerText = 40;
+                                            } else {
+                                                document.getElementById('deliverycharge').innerText = 60;
+                                            }
                                         }
                                     });
                                 });
@@ -435,12 +565,34 @@
                     }
                 });
             });
+            document.getElementById('placeorderbtn').addEventListener('click', () => {
+                {#alert({'carts':JSON.stringify(localStorage.getItem('cart'))});#}
+                var token = '{{csrf_token}}';
+                var item = JSON.stringify(localStorage.getItem('cart'));
+                $.ajax({
+                    url: '/place-order/',
+                    type: 'post',
+                    dataType: 'json',
+                    data: {'carts': JSON.stringify(cart)},
+                    {#data: JSON.stringify({'carts':localStorage.getItem('cart')}),#}
+                    success: function (data) {
+
+
+                        if (data) {
+                            location.href = "{% url "shop:checkout" %}";
+                        } else {
+                            alert("Please login first")
+                            window.location.href = '/accounts/login';
+                        }
+                    }
+                });
+            });
         });
     </script >
 {% endblock %}
 {#                           <!-- Trigger the modal with a button -->#}
 {#<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#quickViewModal">Open Modal</button>#}
-<!-- =================================== Sidebar  JS ====================== -->
+{#<!-- =================================== Sidebar  JS ====================== -->#}
 {#<script type="text/javascript" >#}
 {#    $(document).ready(function () {#}
 {#        var token = '{{csrf_token}}';#}
@@ -489,15 +641,14 @@
 {#    });#}
 {#</script >#}
 <!-- =================================== Sidebar  Part End ====================== -->
-
 {% block quick_view %}
 <!-- Modal -->
     <div class="modal fade" id="quickViewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document" >
-            <div class="modal-content" >
-                <div class="modal-header" style="text-align: center; padding: 5px" >
-                    <div class="text-center" style="float: left; " >
-                        <h6 class="modal-title" id="exampleModalLongTitle" >Brahman Bull-051</h6 >
+            <div class="modal-content" id="modalcontent" >
+                <div class="modal-header text-center" style="text-align: center; padding: 5px" >
+                    <div class="text-center text-center" style="float: left; width: 90% " >
+                        <h6 class="modal-title" id="exampleModalLongTitle" ></h6 >
                     </div >
                     <div style="float: right" >
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
@@ -511,26 +662,29 @@
                             <div class="col-12 col-lg-6" >
                                 <div class="shop-detail_img" >
                                     <button class="round-icon-btn" id="zoom-btn" ><i class="icon_zoom-in_alt" ></i ></button >
-                                    <div class="big-img" >
+                                    <div class="big-img" id='bi' >
                                         {#                                    {% for  image in object.item.images.all %}#}
-                                        <div class="big-img_block" ><img src="{% static 'assets/images/special_offer/c7.jpg' %}" alt="product image" >
+                                        <div class="big-img_block " ><img class="makeempty" id="bi1" src=""
+                                                                          alt="product image" >
                                         </div >
-                                        <div class="big-img_block" ><img src="{% static 'assets/images/special_offer/c9.jpg' %}" alt="product image" >
+                                        <div class="big-img_block " ><img class="makeempty" id="bi2" src=""
+                                                                          alt="product image" >
                                         </div >
-                                        <div class="big-img_block" ><img src="{% static 'assets/images/special_offer/c8.jpg' %}" alt="product image" >
+                                        <div class="big-img_block " ><img class="makeempty" id="bi3" src=""
+                                                                          alt="product image" >
                                         </div >
                                         {#                                    {% endfor %}#}
                                     </div >
-                                    <div class="slide-img" >
+                                    <div class="slide-img" id='si' >
                                         {#                                    {% for  image in object.item.images.all %}#}
-                                        <div class="slide-img_block" ><img src="{% static 'assets/images/special_offer/c7.jpg' %}"
-                                                                           alt="product image" >
+                                        <div class="slide-img_block " ><img class="makeempty" id="si1" src=""
+                                        >
                                         </div >
-                                        <div class="slide-img_block" ><img src="{% static 'assets/images/special_offer/c9.jpg' %}"
-                                                                           alt="product image" >
+                                        <div class="slide-img_block " ><img class="makeempty" id="si2" src=""
+                                        >
                                         </div >
-                                        <div class="slide-img_block" ><img src="{% static 'assets/images/special_offer/c8.jpg' %}"
-                                                                           alt="product image" >
+                                        <div class="slide-img_block " ><img class="makeempty" id="si3" src=""
+                                        >
                                         </div >
                                         {#                                    {% endfor %}#}
                                     </div >
@@ -544,42 +698,59 @@
                                     {#                                <p class="product-describe" >{{ object.item.description|truncatewords:25 }} <a class="product-more"#}
                                     {#                                                                                                               href="#tab-1" >View more <i#}
                                     {#                                        class="arrow_carrot-2right" ></i ></a ></p >#}
-                                    <p class="delivery-status" >Free delivery</p >
+                                    <p class="delivery-status" id="deliverycharges" >Free delivery</p >
                                     <div >
                                         <p class="product-describe" >
-                                        <div >
-                                            <div style="float: left" >Breed:</div >
-                                            <div style="float: right" >{{ cattle.cattleinfo.Breed }}Brahman</div >
+                                        <div id="cattledetails" style="display: none" >
+                                            <div >
+                                                <div style="float: left" >Breed:</div >
+                                                <div style="float: right" id="breed" ></div >
+                                            </div >
+                                            <br ><br >
+                                            <div >
+                                                <div style="float: left" >Height:</div >
+                                                <div style="float: right" id="height" ></div >
+                                            </div >
+                                            <br ><br >
+                                            <div >
+                                                <div style="float: left" >Live Weight:</div >
+                                                <div style="float: right" id="liveweight" ></div >
+                                            </div >
+                                            <br ><br >
                                         </div >
-                                        <br ><br >
-                                        <div >
-                                            <div style="float: left" >Height:</div >
-                                            <div style="float: right" >{{ cattle.cattleinfo.height }}6.2 fit</div >
+                                        <div id="productdetails" style="display: none" >
+                                            <div >
+                                                <div style="float: left" >Product:</div >
+                                                <div style="float: right" id="ptitle" ></div >
+                                            </div >
+                                            <br ><br >
+                                            <div >
+                                                <div style="float: left" >Code:</div >
+                                                <div style="float: right" id="pcode" ></div >
+                                            </div >
+                                            <br ><br >
+                                            <div >
+                                                <div style="float: left" >Additional Info:</div >
+                                                <div style="float: right" id="padditonalinfo" ></div >
+                                            </div >
+                                            <br ><br >
                                         </div >
-                                        <br ><br >
-                                        <div >
-                                            <div style="float: left" >Live Weight:</div >
-                                            <div style="float: right" >{{ cattle.cattleinfo.live_weight }}650 KG</div >
-                                        </div >
-                                        <br ><br >
-                                        <div >
-                                            <div style="float: left" >Expected Weight:</div >
-                                            <div style="float: right" >{{ cattle.cattleinfo.expected_weight }}680 KG</div >
-                                        </div >
+                                        {#                                        <div >#}
+                                        {#                                            <div style="float: left" >Expected Weight:</div >#}
+                                        {#                                            <div id='dem' style="float: right" >{{ cattle.cattleinfo.expected_weight }}680 KG</div >#}
+                                        {#                                        </div >#}
                                         <br >
                                         </p >
                                     </div >
-                                    <p style="font-size: 14px" >
-                                        Brahmans are intermediate in size among beef breeds. Bulls will generally weigh from 1600 to 2200 pounds and
-                                        cows from 1000 to 1400 pounds in average condition. The calves are small at birth, weighing 60 to 65 pounds,
-                                        but grow very rapidly and wean at weights comparable to other breeds.
+                                    <p style="font-size: 14px" id="pdescription" >
                                     </p >
                                     <div class="price-rate" >
-                                        <h3 class="product-price" >
-                                            <del >Tk 150000</del >
-                                            Tk 140000
+                                        <span class="product-price" >Tk</span >
+                                        <h3 class="product-price" style="margin-left: -15px !important;" id="newprice" >
                                         </h3 >
-                                        <h5 class="product-rated" ><i class="icon_star" ></i ><i class="icon_star" ></i ><i
+                                        <span id="oldprice" style="text-decoration: line-through;" ></span >
+                                        <br >
+                                        <h5 class="product-rated text-right" ><i class="icon_star" ></i ><i class="icon_star" ></i ><i
                                                 class="icon_star" ></i ><i class="icon_star" ></i ><i
                                                 class="icon_star-half" ></i ><span >(15)</span ></h5 >
                                     </div >
@@ -593,9 +764,10 @@
                                         <input class="no-round-input" id="quantity" type="number" min="0" value="1" >{{ object.unit }}
                                     </div >
                                     <div class="product-select" style="text-align: center" >
-                                        <a class="add-to-cart normal-btn outline" href="{{ object.item.get_add_to_cart_url }}" style="width: 100%" >Add
-                                                                                                                                                    to
-                                                                                                                                                    Cart</a >
+                                        <button class="add-to-cart normal-btn outline" data-action="ADD_TO_CART" style="width: 100%" >Add
+                                                                                                                                      to
+                                                                                                                                      Cart
+                                        </button >
                                         {#                                    <br ><a href="{{ object.item.get_remove_from_cart_url }}" > remove</a >#}
                                     </div >
                                 </div >
@@ -611,82 +783,107 @@
                         <a href="#" ><i class="fab fa-invision" > </i ></a >&nbsp;&nbsp;
                         <a href="#" ><i class="fab fa-pinterest-p" ></i ></a >&nbsp;&nbsp;
                     </div >
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button >
+                    <button type="button" id="hidemodal" class="btn btn-secondary" data-dismiss="modal" >Close</button >
                     {#                <button type="button" class="btn btn-primary" >Save changes</button >#}
                 </div >
             </div >
         </div >
     </div >
 {% endblock %}
-{% block multilevelnav %}
-    {#    <nav class="navbar navbar-expand-lg navbar-dark bg-primary" >#}
-    {#        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main_nav" >#}
-    {#            <span class="navbar-toggler-icon" ></span >#}
-    {#        </button >#}
-    {#        <div class="collapse navbar-collapse" id="main_nav" >#}
-    {#            <ul class="navbar-nav" >#}
-    {#                <li class="nav-item" ><a class="nav-link" href="#" > First level 1 </a ></li >#}
-    {#                <li class="nav-item" ><a class="nav-link" href="#" > First level 2 </a ></li >#}
-    {#                <li class="nav-item dropdown" >#}
-    {#                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" > First level 3 </a >#}
-    {#                    <ul class="dropdown-menu" >#}
-    {#                        <li ><a class="dropdown-item" href="#" > Second level 1 </a ></li >#}
-    {#                        <li ><a class="dropdown-item" href="#" > Second level 2 &raquo </a >#}
-    {#                            <ul class="submenu dropdown-menu" >#}
-    {#                                <li ><a class="dropdown-item" href="" > Third level 1</a ></li >#}
-    {#                                <li ><a class="dropdown-item" href="" > Third level 2</a ></li >#}
-    {#                                <li ><a class="dropdown-item" href="" > Third level 3 &raquo </a >#}
-    {#                                    <ul class="submenu dropdown-menu" >#}
-    {#                                        <li ><a class="dropdown-item" href="" > Fourth level 1</a ></li >#}
-    {#                                        <li ><a class="dropdown-item" href="" > Fourth level 2</a ></li >#}
-    {#                                    </ul >#}
-    {#                                </li >#}
-    {#                                <li ><a class="dropdown-item" href="" > Second level 4</a ></li >#}
-    {#                                <li ><a class="dropdown-item" href="" > Second level 5</a ></li >#}
-    {#                            </ul >#}
-    {#                        </li >#}
-    {#                        <li ><a class="dropdown-item" href="#" > Dropdown item 3 </a ></li >#}
-    {#                        <li ><a class="dropdown-item" href="#" > Dropdown item 4 </a >#}
-    {#                    </ul >#}
-    {#                </li >#}
-    {#                <li class="nav-item" ><a class="nav-link" href="#" > First level 1 </a ></li >#}
-    {#                <li class="nav-item" ><a class="nav-link" href="#" > First level 2 </a ></li >#}
-    {#            </ul >#}
-    {#        </div > <!-- navbar-collapse.// -->#}
-    {#    </nav >#}
-    <script type="text/javascript" >
-        // Prevent closing from click inside dropdown
-        $(document).on('click', '.dropdown-menu', function (e) {
-            e.stopPropagation();
-        });
-
-        // make it as accordion for smaller screens
-        if ($(window).width() < 992) {
-            $('.dropdown-menu a').click(function (e) {
-                e.preventDefault();
-                if ($(this).next('.submenu').length) {
-                    $(this).next('.submenu').toggle();
-                }
-                $('.dropdown').on('hide.bs.dropdown', function () {
-                    $(this).find('.submenu').hide();
-                })
-            });
-        }
-    </script >
-{% endblock %}
 <script type="text/javascript" >
     $(document).ready(function () {
-        $("#quickviewbtn").click(function () {
+        $(".quickviewbtn").click(function () {
+            {#var modalDom = document.getElementById('modalcontent');#}
+            {#modalDom.insertAdjacentHTML('beforeend', ``);#}
+            $.ajax({
+                url: $(this).attr("data-url"),
+                type: 'post',
+                data: {csrfmiddlewaretoken: '{{ csrf_token }}',},
+                success: function (data) {
+                    console.log(data);
+                    console.log(data['images'][0]['image']);
 
+                    if (data['cattle'] == null) {
+                        $("#ptitle").html("" + data['title']);
+                        $("#pcode").html("" + data['product_code']);
+                        $("#padditionalinfo").html("" + data['itemdetails']['additional_info']);
+                        document.getElementById('cattledetails').style.display = 'none';
+                        document.getElementById('productdetails').style.display = 'block';
+                        $("#deliverycharges").html("Delivery Charge: 60 Tk")
+                    } else {
+                        $("#breed").html("" + data['cattleinfo']['Breed']);
+                        $("#height").html("" + data['cattleinfo']['height']);
+                        $("#liveweight").html("" + data['cattleinfo']['live_weight']);
+                        document.getElementById('productdetails').style.display = 'none';
+                        document.getElementById('cattledetails').style.display = 'block';
+                        $("#deliverycharges").html("Free Delivery")
+                    }
+                    document.getElementById('exampleModalLongTitle').innerText = data['title'];
+                    $('.makeempty').empty();
+                    try {
+                        $("#bi1").attr("src", "" + data['images'][0]['image']);
+                    } catch (e) {
+                        $("#bi1").attr("src", "");
+                    }
+                    try {
+                        $("#bi2").attr("src", "" + data['images'][1]['image']);
+                    } catch (e) {
+                        $("#bi2").attr("src", "");
+                    }
+                    try {
+                        $("#bi3").attr("src", "" + data['images'][2]['image']);
+                    } catch (e) {
+                        $("#bi3").attr("src", "");
+                    }
+                    try {
+                        $("#si1").attr("src", "" + data['images'][0]['image']);
+                    } catch (e) {
+                        $("#si1").attr("src", "");
+                    }
+                    try {
+                        $("#si2").attr("src", "" + data['images'][1]['image']);
+                    } catch (e) {
+                        $("#si2").attr("src", "");
+                    }
+                    try {
+                        $("#si3").attr("src", "" + data['images'][2]['image']);
+                    } catch (e) {
+                        $("#si3").attr("src", "");
+                    }
+
+                    if (data['itemdetails']['discount_offer'] > 0) {
+                        if (data['itemdetails']['discount_offer'] < 1) {
+                            $("#newprice").text(" " + data['price'] - (data['price'] * data['itemdetails']['discount_offer']));
+                            $("#oldprice").text("Tk " + data['price']);
+                        } else {
+                            $("#newprice").text(" " + data['price'] - data['itemdetails']['discount_offer']);
+                            $("#oldprice").text("Tk " + data['price']);
+                        }
+                    } else {
+                        $("#newprice").text(" " + data['price']);
+                        $("#oldprice").text("");
+                    }
+
+                }
+            });
             $("#quickViewModal").modal("show");
         });
 
 
         $("#quickViewModal").on('shown.bs.modal', function () {
             {#alert('The modal is fully shown.');#}
-            $('.slide-img, .big-img').slick('setPosition').slick();
+            try {
+                $('#bi, #si').slick('setPosition').slick();
+            } catch (e) {
+                console.log(e)
+            }
+            {#$('#si').slick('setPosition').slick();#}
 
         });
+        $("#hidemodal").click(function () {
+            $("#quickViewModal").modal("hide");
+        });
+
     });
 </script >
 <div id="modal-div" >
@@ -717,17 +914,17 @@
 
 {% block footer %}
 {% endblock %}
-<script type="text/javascript" >
-    $(document).ready(function () {
-        $("#quickviewbtn").click(function () {
-            $("#quickViewModal").modal("show");
-        });
-        $("#quickViewModal").on('shown.bs.modal', function () {
-            {#alert('The modal is fully shown.');#}
-            $('.slide-img, .big-img').slick('setPosition').slick();
-
-        });
-    });
-</script >
+{#<script type="text/javascript" >#}
+{#    $(document).ready(function () {#}
+{#        $("#quickviewbtn").click(function () {#}
+{#$("#quickViewModal").modal("show");#}
+{#        });#}
+{#        $("#quickViewModal").on('shown.bs.modal', function () {#}
+{#alert('The modal is fully shown.');#}
+{#$('.slide-img, .big-img').slick('setPosition').slick();#}
+{##}
+{#        });#}
+{#    });#}
+{#</script >#}
 </body >
 </html >

@@ -1,0 +1,756 @@
+{% load static %}
+{% load cart_template_tags %}
+<!doctype html>
+<html lang="en" >
+<head >
+    <meta charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" >
+    <meta name="keywords"
+          content="blog, business, clean, clear, cooporate, creative, design web, flat, marketing, minimal, portfolio, shop, shopping, unique" >
+    <meta name="author" content="MARTECH | Deer Creative Theme" >
+    <link rel="shortcut icon" href="{% static 'assets/images/custom_icons/somikoronfav.png' %}" >
+    {#MDB#}
+    <!-- Font Awesome -->
+    {#    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" >#}
+    <!-- Google Fonts -->
+    {#    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" >#}
+    <!-- Bootstrap core CSS -->
+    {#    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" >#}
+    <!-- Material Design Bootstrap -->
+    {#    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet" >#}
+    {#  slider #}
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.1/css/swiper.min.css' >
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css' >
+    {#    <link rel="stylesheet" href="{% static 'assets/css/slider_style.css' %}" >#}
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" >
+    <link rel="stylesheet" href="{% static 'assets/css/adjusted_style.css' %}" >
+    <link rel="stylesheet" href="{% static 'assets/css/custom_bootstrap.css' %}" >
+    <link rel="stylesheet" href="{% static 'assets/css/normalize.css' %}" >
+    <link rel="stylesheet" href="{% static 'assets/css/fontawesome.css' %}" >
+    <link rel="stylesheet" href="{% static 'assets/css/elegant.css' %}" >
+    <link rel="stylesheet" href="{% static 'assets/css/animate.css' %}" >
+    <link rel="stylesheet" href="{% static 'assets/css/slick.css' %}" >
+    <link rel="stylesheet" href="{% static 'assets/css/scroll.css' %}" >
+    <link rel="stylesheet" href="{% static 'assets/css/icomoon.css' %}" >
+    <link rel="stylesheet" href="{% static 'assets/css/jquery.fancybox.min.css' %}" >
+    {#    <link rel="shortcut icon" href="{% static 'assets/images/shortcut_logo.png' %}" >#}
+    {#    <link rel="stylesheet" href="{% static 'assets/css/adjusted_style.css' %}" >#}
+    <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" >
+    {#    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"#}
+    {#          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" >#}
+    <title >{% block head_title %}{% endblock %}</title >
+    {% block extra_head %}
+    {% endblock %}
+    <style >
+        .product .product-name {
+            font-size: 16px;
+        }
+    </style >
+</head >
+<body >
+{#slider#}
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+{#<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" ></script >#}
+<script src="{% static 'assets/jquery/jquery.min.js' %}" ></script >
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous" ></script >
+{#<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"#}
+{#        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous" ></script >#}
+<script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}" ></script >
+<script src="{% static 'assets/js/jquery-ui.min.js' %}" ></script >
+<script src="{% static 'assets/js/jquery.countdown.min.js' %}" ></script >
+<script src="{% static 'assets/js/slick.min.js' %}" ></script >
+<script src="{% static 'assets/js/jquery.easing.js' %}" ></script >
+<script src="{% static 'assets/js/jquery.scrollUp.min.js' %}" ></script >
+<script src="{% static 'assets/js/jquery.zoom.min.js' %}" ></script >
+<script src="{% static 'assets/js/parallax.js' %}" ></script >
+<script src="{% static 'assets/js/jquery.fancybox.js' %}" ></script >
+<script src="{% static 'assets/js/numscroller-1.0.js' %}" ></script >
+<script src="{% static 'assets/js/vanilla-tilt.min.js' %}" ></script >
+<script src="{% static 'assets/js/main.js' %}" ></script >
+<script src="{% static 'assets/js/mobile-menu-listener.js' %}" ></script >
+{#<script src="{% static 'assets/js/cart_js.js' %}" ></script >#}
+<!-- ManyChat -->
+<script src="//widget.manychat.com/114667473628110.js" async="async" ></script >
+
+{% if messages %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert" >
+        {% for message in messages %}
+            {{ message }}----------alert-{{ message.tags }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" >
+                <span aria-hidden="true" >&times;</span >
+            </button >
+        {% endfor %}
+    </div >
+{% endif %}
+{% block qwuickcart %}
+    <div class="asd" id="floatcartdiv" >
+        <!-- =================================== Float Part start====================== -->
+        <div class="float_cart" id="floatcart" onclick="sidebarOPen()" >
+            <div class="float_content" style="background-color: rgb(203, 36, 27)" >
+                <div class="float_icon" >
+                    <h5 style="color: white" ><i class="fa fa-shopping-cart" aria-hidden="true" ></i >
+                    </h5 >
+                </div >
+                <h6 style="color: white; margin-top: -10px; font-size: 12px" ><span id="floatingtotalitems" >0</span > Items</h6 >
+                {#                {{ request.user|cart_item_count }}#}
+            </div >
+            <div class="float_price" style="background-color: rgb(253,240,177)" >
+                <h6 ><span >৳</span ><span id="floatcarttotal" >0</span ></h6 >
+                {#                {{ request.user|cart_total_count|stringformat:".0f" }}#}
+            </div >
+        </div >
+        <!-- =================================== Float Part End ====================== -->
+        <!-- =================================== Sidebar  Part start====================== -->
+        <div id="add_cart_sidebar" class="px-1" style="margin-top: 57px; " >
+            <div class="closeSidebar" onclick="closeSidebar()" style="vertical-align: middle" >Close</i>
+            </div >
+            <div class="specialCode" >
+                <button class="special_code" onclick="clickCode()" > <span ><i class="fa fa-chevron-circle-up" aria-hidden="true" ></i >
+               </span > Have a special code?
+                </button >
+                <div class="token_form px-2" id="hiddenform" >
+                    <form >
+                        <div class="row justify-content-center text-center px-2" >
+                            <div class="col-md-8 col-sm-8 py-2" >
+                                <input type="text" class="form-control token_input" id="exampleInputEmail1" placeholder="Enter code" >
+                            </div >
+                            <div class="col-md-4 col-sm-4 text-center py-2" >
+                                <button type="submit" class="btn bt-block  tokent_btn" >Go</button >
+                            </div >
+                        </div >
+                    </form >
+                </div >
+                <div class="place_order" >
+                    <div class="po_btn" >
+                        <button class=" pl_btn" id="placeorderbtn" >Place order</button >
+                    </div >
+                    <div class="po_btn" >
+                        <button class=" pr_btn" id="cart_total" >0</button >
+                    </div >
+                </div >
+            </div >
+            <!-- ===================================== Sidebar Inner row Start=============================== -->
+            <div class="row justify-content-center text-center" >
+                <div class="col-md-12" >
+                    <div class="header_selected_product text-left" >
+                        <h3 style="font-size: 13px; padding-left: 18px" ><i class="fa fa-shopping-cart"
+                                                                            aria-hidden="true" ></i ><span id="cartheadingtotalitems" >0</span >
+                            Items Selected</h3 >
+                    </div >
+                </div >
+            </div >
+            <div class="row justify-content-center sidebar_row mb-1" >
+                <div class="col-md-12" >
+                    <div class="text-center " style="background-color: #eace89; padding: 5px 10px" >
+                        <h6 style="color: #000000" >Delivery Charge ৳<span id="deliverycharge" style="" >60</span ></h6 >
+                    </div >
+                </div >
+            </div >
+            <div class="row justify-content-center sidebar_row mb-1" >
+                <div class="col-md-12 col-sm-12 cart" style="overflow-y: scroll; height: 480px" >
+                    <table class="table table-borderless" id="carttable" style=" border-collapse: collapse;" >
+                        <tbody class="cart" >
+                        {#                        {% for item in cartitems.items.all %}#}
+                        {#                            <tr style="width: 300px !important; " >#}
+                        {#                                <td colspan="3" style=" padding-bottom: 0px; width: 300px !important;" >{{ item.item.title|truncatechars:28 }}#}
+                        {#                                    <a style="float: right" >#}
+                        {#                                        <i class="fas fa-trash"#}
+                        {#                                           style="padding-right: 0px !important; font-size: 15px !important; color:#cd0d0d; " ></i >#}
+                        {#                                    </a >#}
+                        {#                                </td >#}
+                        {#                            </tr >#}
+                        {#                            <tr style="border-bottom:1pt solid lightgray;" >#}
+                        {#                                <th scope="col" ><img class="product__image" style="width: 50px;" src="{{ item.item.images.all.0.image.url }}"#}
+                        {#                                                      alt="" ></th >#}
+                        {#                                <th scope="col" style="padding-bottom: 18px; text-align: center" >#}
+                        {#                                    <button class="btn  btn-small" style="padding: 0px 5px; background-color: #c3e6cb" data-action="INCREASE_ITEM" >#}
+                        {#                                        &plus;#}
+                        {#                                    </button >#}
+                        {#                                    <span class="cart__item__quantity font-weight-bold" >55</span >#}
+                        {#                                    <button class="btn  btn-small" style="padding: 0px 5px;background-color: #fadc8c " data-action="DECREASE_ITEM" >#}
+                        {#                                        &minus;#}
+                        {#                                    </button >#}
+                        {#                                </th >#}
+                        {#                                <th scope="col" style="text-align: right; padding-bottom: 22px" >Tk. <span class="cart__item__price" >220</span >#}
+                        {#                                </th >#}
+                        {#                            </tr >#}
+                        {#                        {% endfor %}#}
+                        </tbody >
+                    </table >
+                    {#                    {% for item in cartitems.items.all %}#}
+                    {#                        <div class="row justify-content-center px-0  py-2" style="padding-left: 30px !important;" >#}
+                    {#                            <div class="col-md-2" >#}
+                    {#                                <div class="sidebar_image" >#}
+                    {#                                    <img src="{{ item.item.images.all.0.image.url }}" alt="" >#}
+                    {#                                </div >#}
+                    {#                            </div >#}
+                    {#                            <div class="col-md-5" >#}
+                    {#                                <div class="selected_product" >#}
+                    {#                                    <p id="product_name" style="margin-bottom: 5px; width: 220px" >#}
+                    {#                                        {{ item.item.title }}#}
+                    {#                                    </p >#}
+                    {#                                    <small >325/500gm</small >#}
+                    {#                                    <p id="quantitty" style="margin-top: 5px; margin-right: 0px !important;" >#}
+                    {#                                        <span >Qty :</span >#}
+                    {#                                        <input class="no-round-input"#}
+                    {#                                               style="width: 50px; height: 30px; padding: 5px !important; margin-right: 0px !important; text-align: center"#}
+                    {#                                               type="number" value="{{ item.quantity }}" />#}
+                    {#                                    </p >#}
+                    {#                                </div >#}
+                    {#                            </div >#}
+                    {#                            <div class="col-md-5" >#}
+                    {#                                <div class="prduct_price" >#}
+                    {#                                    <p id="product_price" style="margin-bottom: 0px !important; margin-top: 7px" >#}
+                    {#                                        <span >৳</span >{{ item.get_total_discount_item_price|stringformat:".1f" }}#}
+                    {#                                        {% if item.item.itemdetails.discount_offer > 0 %}#}
+                    {#                                            <br ><span class="badge badge-primary"#}
+                    {#                                                       style="font-size: 10px;" >Saved {{ item.get_amount_saved|stringformat:".0f" }}</span >#}
+                    {#                                        {% endif %}#}
+                    {#                                    </p >#}
+                    {#                                    <div class="close_add_product" onclick="closeAddProduct()" >#}
+                    {#                                        <a href="{{ item.item.get_remove_from_cart_url }}" >#}
+                    {#                                            <i class="fas fa-trash"#}
+                    {#                                               style="padding-right: 0px !important; font-size: 15px !important; color:#cd0d0d; " ></i >#}
+                    {#                                        </a >#}
+                    {#                                    </div >#}
+                    {#                                </div >#}
+                    {#                            </div >#}
+                    {#                        </div >#}
+                    {#                    {% endfor %}#}
+                </div >
+            </div >
+            <!-- ===================================== Sidebar Inner row End =============================== -->
+        </div >
+        <!-- =================================== Sidebar  Part End ====================== -->
+    </div >
+
+    <script >
+        $(document).ready(function () {
+            'use strict';
+
+            let cart = (JSON.parse(localStorage.getItem('cart')) || []);
+
+            const cartDOM = document.querySelector('.cart');
+            const addToCartButtonsDOM = document.querySelectorAll('[data-action="ADD_TO_CART"]');
+            var carttotal = 0;
+            if (cart.length > 0) {
+                cart.forEach(cartItem => {
+                    const product = cartItem;
+
+                    {#cartDOM.insertAdjacentHTML('beforeend', `#}
+                    {#      <div class="cart__item">#}
+                    {#        <img class="cart__item__image" src="${product.image}" alt="${product.name}">#}
+                    {#        <h3 class="cart__item__name">${product.name}</h3>#}
+                    {#        <h3 class="cart__item__price">${product.price}</h3>#}
+                    {#        <button class="btn btn--primary btn--small${(product.quantity === 1 ? ' btn--danger' : '')}" data-action="DECREASE_ITEM">&minus;</button>#}
+                    {#        <h3 class="cart__item__quantity">${product.quantity}</h3>#}
+                    {#        <button class="btn btn--primary btn--small" data-action="INCREASE_ITEM">&plus;</button>#}
+                    {#        <button class="btn btn--danger btn--small" data-action="REMOVE_ITEM">&times;</button>#}
+                    {#      </div>#}
+                    {#    `);#}
+                    var itemtotal = product.price * product.quantity;
+                    var tablenew = document.getElementById('carttable');
+                    var txt = `
+                            <tr id="titlerow${product.name}"  style="width: 300px !important; " >
+                                <td colspan="3" style=" padding-bottom: 0px; width: 300px !important;" >${product.title}
+                                    <a style="float: right" id="removeitem${product.name}" data-action="REMOVE_ITEM">
+                                        <i class="fas fa-trash"
+                                           style="padding-right: 0px !important; font-size: 15px !important; color:#cd0d0d; " ></i >
+                                    </a >
+                                </td >
+                            </tr >
+                            <tr class="cart__item" style="border-bottom:1pt solid lightgray;">
+                                <th scope="col" ><img style="width: 50px;" class="cart__item__image" src="${product.image}" alt="${product.image}" ></th >
+                                <th scope="col" style="padding-bottom: 15px; text-align: center">
+                                    <button class="btn  btn-small" style="padding: 0px 5px; background-color: #c3e6cb" data-action="INCREASE_ITEM" >&plus;</button >
+                                    <span class="cart__item__quantity font-weight-bold" >${product.quantity}</span >
+                                    <button class="btn  btn-small${(product.quantity === 1 ? ' btn--danger' : '')}" style="padding: 0px 5px;background-color: #fadc8c " data-action="DECREASE_ITEM">&minus;</button>
+                                    <p hidden class="cart__item__name">${product.name}</p>
+                                </th >
+                                <th scope="col" style="text-align: right; padding-bottom: 22px">Tk. <span class="cart__item__price">${itemtotal}</span></th >
+                            </tr >
+                          `;
+                    $(tablenew).find('tbody').append(txt);
+                    carttotal = parseFloat(document.getElementById('cart_total').innerText)
+                    document.getElementById('cart_total').innerHTML = carttotal + (product.price * product.quantity);
+                    document.getElementById('floatcarttotal').innerHTML = carttotal + (product.price * product.quantity);
+                    document.getElementById('floatingtotalitems').innerHTML = parseFloat(document.getElementById('floatingtotalitems').innerHTML) + 1;
+                    document.getElementById('cartheadingtotalitems').innerHTML = parseFloat(document.getElementById('cartheadingtotalitems').innerHTML) + 1;
+                    addToCartButtonsDOM.forEach(addToCartButtonDOM => {
+                        const productDOM = addToCartButtonDOM.closest(".cartable");
+                        var pronameDom = '';
+                        try {
+                            pronameDom = productDOM.querySelector('.product__name').innerText;
+                        } catch (e) {
+                            pronameDom = '';
+                            {#alert(e);#}
+                        }
+                        {#var proname =cartDOM.querySelector('.cart__item__name').innerText;#}
+                        {#alert(pronameDom);#}
+
+                        if (pronameDom === cartItem.name) {
+                            addToCartButtonDOM.innerText = 'In Cart';
+                            addToCartButtonDOM.disabled = true;
+                            const cartItemsDOM = cartDOM.querySelectorAll('.cart__item');
+                            cartItemsDOM.forEach(cartItemDOM => {
+                                if (cartItemDOM.querySelector('.cart__item__name').innerText === product.name) {
+                                    cartItemDOM.querySelector('[data-action="INCREASE_ITEM"]').addEventListener('click', () => {
+                                        cart.forEach(cartItem => {
+                                            if (cartItem.name === product.name) {
+                                                cartItemDOM.querySelector('.cart__item__quantity').innerText = ++cartItem.quantity;
+                                                cartItemDOM.querySelector('.cart__item__price').innerText = (cartItemDOM.querySelector('.cart__item__quantity').innerText) * cartItem.price;
+                                                cartItemDOM.querySelector('[data-action="DECREASE_ITEM"]').classList.remove('btn--danger');
+                                                carttotal = parseFloat(document.getElementById('cart_total').innerHTML);
+                                                document.getElementById('cart_total').innerHTML = carttotal + parseFloat(product.price);
+                                                document.getElementById('floatcarttotal').innerHTML = carttotal + parseFloat(product.price);
+                                                localStorage.setItem('cart', JSON.stringify(cart));
+
+                                                if (document.getElementById('cart_total').innerText >= 1000) {
+                                                    document.getElementById('deliverycharge').innerText = 40;
+                                                } else {
+                                                    document.getElementById('deliverycharge').innerText = 60;
+                                                }
+                                            }
+                                        });
+                                    });
+
+                                    cartItemDOM.querySelector('[data-action="DECREASE_ITEM"]').addEventListener('click', () => {
+                                        cart.forEach(cartItem => {
+                                            if (cartItem.name === product.name) {
+                                                if (cartItem.quantity > 1) {
+                                                    cartItemDOM.querySelector('.cart__item__quantity').innerText = --cartItem.quantity;
+                                                    cartItemDOM.querySelector('.cart__item__price').innerText = (cartItemDOM.querySelector('.cart__item__quantity').innerText) * cartItem.price
+                                                    carttotal = parseFloat(document.getElementById('cart_total').innerHTML);
+                                                    document.getElementById('cart_total').innerHTML = carttotal - parseFloat(product.price);
+                                                    document.getElementById('floatcarttotal').innerHTML = carttotal - parseFloat(product.price);
+                                                    localStorage.setItem('cart', JSON.stringify(cart));
+
+                                                    if (document.getElementById('cart_total').innerText >= 1000) {
+                                                        document.getElementById('deliverycharge').innerText = 40;
+                                                    } else {
+                                                        document.getElementById('deliverycharge').innerText = 60;
+                                                    }
+                                                } else {
+                                                    try {
+                                                        cartItemDOM.classList.add('cart__item--removed');
+                                                        setTimeout(() => cartItemDOM.remove(), 250);
+                                                        document.getElementById('titlerow' + cartItem.name).remove()
+                                                        cart = cart.filter(cartItem => cartItem.name !== product.name);
+                                                        carttotal = parseFloat(document.getElementById('cart_total').innerHTML);
+                                                        document.getElementById('cart_total').innerHTML = carttotal - parseFloat(product.price);
+                                                        document.getElementById('floatcarttotal').innerHTML = carttotal - parseFloat(product.price);
+                                                        document.getElementById('floatingtotalitems').innerHTML = parseFloat(document.getElementById('floatingtotalitems').innerHTML) - 1;
+                                                        document.getElementById('cartheadingtotalitems').innerHTML = parseFloat(document.getElementById('cartheadingtotalitems').innerHTML) - 1;
+                                                        localStorage.setItem('cart', JSON.stringify(cart));
+                                                        addToCartButtonDOM.innerText = 'Add To Cart';
+                                                        addToCartButtonDOM.disabled = false;
+
+                                                        if (document.getElementById('cart_total').innerText >= 1000) {
+                                                            document.getElementById('deliverycharge').innerText = 40;
+                                                        } else {
+                                                            document.getElementById('deliverycharge').innerText = 60;
+                                                        }
+                                                    } catch (e) {
+                                                        alert(e);
+                                                    }
+                                                }
+
+                                                if (cartItem.quantity === 1) {
+                                                    cartItemDOM.querySelector('[data-action="DECREASE_ITEM"]').classList.add('btn--danger');
+                                                }
+                                            }
+                                        });
+                                    });
+                                    document.getElementById('titlerow' + product.name).querySelector('[data-action="REMOVE_ITEM"]').addEventListener('click', () => {
+                                        cart.forEach(cartItem => {
+                                            if (cartItem.name === product.name) {
+                                                cartItemDOM.classList.add('cart__item--removed');
+                                                setTimeout(() => cartItemDOM.remove(), 250);
+                                                document.getElementById('titlerow' + product.name).remove();
+                                                carttotal = parseFloat(document.getElementById('cart_total').innerHTML);
+                                                document.getElementById('cart_total').innerHTML = carttotal - parseFloat(product.price)*cartItem.quantity;
+                                                document.getElementById('floatcarttotal').innerHTML = carttotal - parseFloat(product.price)*cartItem.quantity;
+                                                document.getElementById('floatingtotalitems').innerHTML = parseFloat(document.getElementById('floatingtotalitems').innerHTML) - 1;
+                                                document.getElementById('cartheadingtotalitems').innerHTML = parseFloat(document.getElementById('cartheadingtotalitems').innerHTML) - 1;
+                                                cart = cart.filter(cartItem => cartItem.name !== product.name);
+                                                localStorage.setItem('cart', JSON.stringify(cart));
+                                                addToCartButtonDOM.innerText = 'Add To Cart';
+                                                addToCartButtonDOM.disabled = false;
+
+                                                if (document.getElementById('cart_total').innerText >= 1000) {
+                                                    document.getElementById('deliverycharge').innerText = 40;
+                                                } else {
+                                                    document.getElementById('deliverycharge').innerText = 60;
+                                                }
+                                            }
+                                        });
+                                    });
+
+                                }
+                            });
+
+                        }
+
+
+                    });
+
+                });
+                if (document.getElementById('cart_total').innerText >= 1000) {
+                    document.getElementById('deliverycharge').innerText = 40;
+                } else {
+                    document.getElementById('deliverycharge').innerText = 60;
+                }
+            }
+
+            addToCartButtonsDOM.forEach(addToCartButtonDOM => {
+                addToCartButtonDOM.addEventListener('click', () => {
+                    const productDOM = addToCartButtonDOM.closest(".cartable");
+                    const product = {
+                        image: productDOM.querySelector('.product__image').getAttribute('src'),
+                        name: productDOM.querySelector('.product__name').innerText,
+                        title: productDOM.querySelector('.product__title').innerText,
+                        price: productDOM.querySelector('.product__price').innerText,
+                        quantity: 1,
+                    };
+                    const isInCart = (cart.filter(cartItem => (cartItem.name === product.name)).length > 0);
+                    var table = document.getElementById('carttable');
+                    {#cartDOM.insertAdjacentHTML('beforeend',"<img src='${product.image}'>" );#}
+                    if (!isInCart) {
+                        {#cartDOM.insertAdjacentHTML( );#}
+                        var txt = `
+                            <tr id="titlerow${product.name}"  style="width: 300px !important; " >
+                                <td colspan="3" style=" padding-bottom: 0px; width: 300px !important;" >${product.title}
+                                    <a style="float: right" id="removeitem${product.name}">
+                                        <i class="fas fa-trash"
+                                           style="padding-right: 0px !important; font-size: 15px !important; color:#cd0d0d; " ></i >
+                                    </a >
+                                </td >
+                            </tr >
+                            <tr class="cart__item" style="border-bottom:1pt solid lightgray;">
+                                <th scope="col" ><img style="width: 50px;" class="cart__item__image" src="${product.image}" alt="${product.image}" ></th >
+                                <th scope="col" style="padding-bottom: 15px; text-align: center">
+                                    <button class="btn  btn-small" style="padding: 0px 5px; background-color: #c3e6cb" data-action="INCREASE_ITEM" >&plus;</button >
+                                    <span class="cart__item__quantity font-weight-bold" >${product.quantity}</span >
+                                    <button class="btn  btn-small${(product.quantity === 1 ? ' btn--danger' : '')}" style="padding: 0px 5px;background-color: #fadc8c " data-action="DECREASE_ITEM">&minus;</button>
+                                    <p hidden class="cart__item__name">${product.name}</p>
+                                </th >
+                                <th scope="col" style="text-align: right; padding-bottom: 22px">Tk. <span class="cart__item__price">${product.price}</span></th >
+                            </tr >
+                          `;
+                        $(table).find('tbody').append(txt);
+                        cart.push(product);
+                        carttotal = parseFloat(document.getElementById('cart_total').innerHTML);
+                        document.getElementById('cart_total').innerHTML = carttotal + parseFloat(product.price * product.quantity);
+                        document.getElementById('floatcarttotal').innerHTML = carttotal + parseFloat(product.price * product.quantity);
+                        document.getElementById('floatingtotalitems').innerHTML = parseFloat(document.getElementById('floatingtotalitems').innerHTML) + 1;
+                        document.getElementById('cartheadingtotalitems').innerHTML = parseFloat(document.getElementById('cartheadingtotalitems').innerHTML) + 1;
+                        localStorage.setItem('cart', JSON.stringify(cart));
+                        addToCartButtonDOM.innerText = 'In Cart';
+                        addToCartButtonDOM.disabled = true;
+
+                        if (document.getElementById('cart_total').innerText >= 1000) {
+                            document.getElementById('deliverycharge').innerText = 40;
+                        } else {
+                            document.getElementById('deliverycharge').innerText = 60;
+                        }
+
+                        const cartItemsDOM = cartDOM.querySelectorAll('.cart__item');
+                        cartItemsDOM.forEach(cartItemDOM => {
+                            if (cartItemDOM.querySelector('.cart__item__name').innerText === product.name) {
+
+                                cartItemDOM.querySelector('[data-action="INCREASE_ITEM"]').addEventListener('click', () => {
+                                    cart.forEach(cartItem => {
+                                        if (cartItem.name === product.name) {
+                                            cartItemDOM.querySelector('.cart__item__quantity').innerText = ++cartItem.quantity;
+                                            cartItemDOM.querySelector('[data-action="DECREASE_ITEM"]').classList.remove('btn--danger');
+                                            carttotal = parseFloat(document.getElementById('cart_total').innerHTML);
+                                            document.getElementById('cart_total').innerHTML = carttotal + parseFloat(product.price);
+                                            document.getElementById('floatcarttotal').innerHTML = carttotal + parseFloat(product.price);
+                                            cartItemDOM.querySelector('.cart__item__price').innerText = (cartItemDOM.querySelector('.cart__item__quantity').innerText) * cartItem.price
+                                            localStorage.setItem('cart', JSON.stringify(cart));
+
+                                            if (document.getElementById('cart_total').innerText >= 1000) {
+                                                document.getElementById('deliverycharge').innerText = 40;
+                                            } else {
+                                                document.getElementById('deliverycharge').innerText = 60;
+                                            }
+                                        }
+                                    });
+                                });
+
+                                cartItemDOM.querySelector('[data-action="DECREASE_ITEM"]').addEventListener('click', () => {
+                                    cart.forEach(cartItem => {
+                                        if (cartItem.name === product.name) {
+                                            if (cartItem.quantity > 1) {
+                                                cartItemDOM.querySelector('.cart__item__quantity').innerText = --cartItem.quantity;
+                                                cartItemDOM.querySelector('.cart__item__price').innerText = (cartItemDOM.querySelector('.cart__item__quantity').innerText) * cartItem.price
+                                                carttotal = parseFloat(document.getElementById('cart_total').innerHTML);
+                                                document.getElementById('cart_total').innerHTML = carttotal - parseFloat(product.price);
+                                                document.getElementById('floatcarttotal').innerHTML = carttotal - parseFloat(product.price);
+                                                localStorage.setItem('cart', JSON.stringify(cart));
+
+                                                if (document.getElementById('cart_total').innerText >= 1000) {
+                                                    document.getElementById('deliverycharge').innerText = 40;
+                                                } else {
+                                                    document.getElementById('deliverycharge').innerText = 60;
+                                                }
+                                            } else {
+                                                cartItemDOM.classList.add('cart__item--removed');
+                                                setTimeout(() => cartItemDOM.remove(), 250);
+                                                setTimeout(() => document.getElementById('titlerow' + product.name).remove(), 250);
+                                                cart = cart.filter(cartItem => cartItem.name !== product.name);
+                                                carttotal = parseFloat(document.getElementById('cart_total').innerHTML);
+                                                document.getElementById('cart_total').innerHTML = carttotal - parseFloat(product.price);
+                                                document.getElementById('floatcarttotal').innerHTML = carttotal - parseFloat(product.price);
+                                                document.getElementById('floatingtotalitems').innerHTML = parseFloat(document.getElementById('floatingtotalitems').innerHTML) - 1;
+                                                document.getElementById('cartheadingtotalitems').innerHTML = parseFloat(document.getElementById('cartheadingtotalitems').innerHTML) - 1;
+                                                localStorage.setItem('cart', JSON.stringify(cart));
+                                                addToCartButtonDOM.innerText = 'Add To Cart';
+                                                addToCartButtonDOM.disabled = false;
+
+                                                if (document.getElementById('cart_total').innerText >= 1000) {
+                                                    document.getElementById('deliverycharge').innerText = 40;
+                                                } else {
+                                                    document.getElementById('deliverycharge').innerText = 60;
+                                                }
+                                            }
+
+                                            if (cartItem.quantity === 1) {
+                                                cartItemDOM.querySelector('[data-action="DECREASE_ITEM"]').classList.add('btn--danger');
+                                            }
+                                        }
+                                    });
+                                });
+
+                                document.getElementById('removeitem' + product.name).addEventListener('click', () => {
+                                    cart.forEach(cartItem => {
+                                        if (cartItem.name === product.name) {
+                                            cartItemDOM.classList.add('cart__item--removed');
+                                            setTimeout(() => cartItemDOM.remove(), 250);
+                                            setTimeout(() => document.getElementById('titlerow' + product.name).remove(), 250);
+                                            carttotal = parseFloat(document.getElementById('cart_total').innerHTML);
+                                            document.getElementById('cart_total').innerHTML = carttotal - parseFloat(product.price)*product.quantity;
+                                            document.getElementById('floatcarttotal').innerHTML = carttotal - parseFloat(product.price)*product.quantity;
+                                            document.getElementById('floatingtotalitems').innerHTML = parseFloat(document.getElementById('floatingtotalitems').innerHTML) - 1;
+                                            document.getElementById('cartheadingtotalitems').innerHTML = parseFloat(document.getElementById('cartheadingtotalitems').innerHTML) - 1;
+                                            cart = cart.filter(cartItem => cartItem.name !== product.name);
+                                            localStorage.setItem('cart', JSON.stringify(cart));
+                                            addToCartButtonDOM.innerText = 'Add To Cart';
+                                            addToCartButtonDOM.disabled = false;
+
+                                            if (document.getElementById('cart_total').innerText >= 1000) {
+                                                document.getElementById('deliverycharge').innerText = 40;
+                                            } else {
+                                                document.getElementById('deliverycharge').innerText = 60;
+                                            }
+                                        }
+                                    });
+                                });
+
+                            }
+                        });
+                    }
+                });
+            });
+            document.getElementById('placeorderbtn').addEventListener('click', () => {
+                {#alert({'carts':JSON.stringify(localStorage.getItem('cart'))});#}
+                var token = '{{csrf_token}}';
+                var item = JSON.stringify(localStorage.getItem('cart'));
+                $.ajax({
+                    url: '/place-order/',
+                    type: 'post',
+                    dataType: 'json',
+                    data: {'carts': JSON.stringify(cart)},
+                    {#data: JSON.stringify({'carts':localStorage.getItem('cart')}),#}
+                    success: function (data) {
+
+
+                        if (data) {
+                            location.href = "{% url "shop:checkout" %}";
+                        } else {
+                            alert("Please login first")
+                            window.location.href = '/accounts/login';
+                        }
+                    }
+                });
+            });
+        });
+    </script >
+{% endblock %}
+{#                           <!-- Trigger the modal with a button -->#}
+{#<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#quickViewModal">Open Modal</button>#}
+<!-- =================================== Sidebar  JS ====================== -->
+{#<script type="text/javascript" >#}
+{#    $(document).ready(function () {#}
+{#        var token = '{{csrf_token}}';#}
+{#        var itemtxt = ''#}
+{#        $.ajax({#}
+{#            url: '/cart-item-view/',#}
+{#            type: 'POST',#}
+{#            data: {csrfmiddlewaretoken: '{{ csrf_token }}',},#}
+{#            success: function (data) {#}
+{#                console.log(data);#}
+{#cart = JSON.parse(data);#}
+{#items=data[0].fields;#}
+{#                console.log(data.id);#}
+{#                for (item in data.items) {#}
+{#                    x = data.items[item]#}
+{#                    console.log(x.item.title);#}
+{#                    itemtxt += "<div class=\"row justify-content-center px-0  py-2\" style=\"padding-left: 20px !important;\" >\#}
+{#                                    <div class=\"col-md-2\" > \#}
+{#                                        <div class=\"sidebar_image\" >\#}
+{#                                            <img src=\"\" alt=\"\" >\#}
+{#                                        </div >\#}
+{#                                    </div >\#}
+{#                                    <div class=\"col-md-5\" >\#}
+{#                                        <div class=\"selected_product\" >\#}
+{#                                            <p id=\"product_name\" name=\"cartitemname\" >\#}
+{#                                                " + x.item.title + "\#}
+{#                                                <small >325/500gm</small >\#}
+{#                                            </p >\#}
+{#                                            <p id=\"quantitty\" style=\"margin: -3px 0px !important;\" ><span >Total :</span > 3</p >\#}
+{#                                        </div >\#}
+{#                                    </div >\#}
+{#                                    <div class=\"col-md-5\" >\#}
+{#                                        <div class=\"prduct_price\" >\#}
+{#                                            <p id=\"product_price\" >\#}
+{#                                                <span >৳</span >" + x.item.price + "\#}
+{#                                            </p >\#}
+{#                                        </div >\#}
+{#                                    </div >\#}
+{#                                </div >\#}
+{#                                <div class=\"close_add_product\" onclick=\"closeAddProduct()\" >x</div >"#}
+{##}
+{#                }#}
+{#                $("#cartitems").append(itemtxt);#}
+{#            }#}
+{#        });#}
+{#    });#}
+{#</script >#}
+<!-- =================================== Sidebar  Part End ====================== -->
+
+{% block quick_view %}
+<!-- Modal -->
+    <div class="modal fade" id="quickViewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" >
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document" >
+        </div >
+    </div >
+
+    <script type="text/javascript" >
+    </script >
+{% endblock %}
+{% block multilevelnav %}
+    {#    <nav class="navbar navbar-expand-lg navbar-dark bg-primary" >#}
+    {#        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main_nav" >#}
+    {#            <span class="navbar-toggler-icon" ></span >#}
+    {#        </button >#}
+    {#        <div class="collapse navbar-collapse" id="main_nav" >#}
+    {#            <ul class="navbar-nav" >#}
+    {#                <li class="nav-item" ><a class="nav-link" href="#" > First level 1 </a ></li >#}
+    {#                <li class="nav-item" ><a class="nav-link" href="#" > First level 2 </a ></li >#}
+    {#                <li class="nav-item dropdown" >#}
+    {#                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" > First level 3 </a >#}
+    {#                    <ul class="dropdown-menu" >#}
+    {#                        <li ><a class="dropdown-item" href="#" > Second level 1 </a ></li >#}
+    {#                        <li ><a class="dropdown-item" href="#" > Second level 2 &raquo </a >#}
+    {#                            <ul class="submenu dropdown-menu" >#}
+    {#                                <li ><a class="dropdown-item" href="" > Third level 1</a ></li >#}
+    {#                                <li ><a class="dropdown-item" href="" > Third level 2</a ></li >#}
+    {#                                <li ><a class="dropdown-item" href="" > Third level 3 &raquo </a >#}
+    {#                                    <ul class="submenu dropdown-menu" >#}
+    {#                                        <li ><a class="dropdown-item" href="" > Fourth level 1</a ></li >#}
+    {#                                        <li ><a class="dropdown-item" href="" > Fourth level 2</a ></li >#}
+    {#                                    </ul >#}
+    {#                                </li >#}
+    {#                                <li ><a class="dropdown-item" href="" > Second level 4</a ></li >#}
+    {#                                <li ><a class="dropdown-item" href="" > Second level 5</a ></li >#}
+    {#                            </ul >#}
+    {#                        </li >#}
+    {#                        <li ><a class="dropdown-item" href="#" > Dropdown item 3 </a ></li >#}
+    {#                        <li ><a class="dropdown-item" href="#" > Dropdown item 4 </a >#}
+    {#                    </ul >#}
+    {#                </li >#}
+    {#                <li class="nav-item" ><a class="nav-link" href="#" > First level 1 </a ></li >#}
+    {#                <li class="nav-item" ><a class="nav-link" href="#" > First level 2 </a ></li >#}
+    {#            </ul >#}
+    {#        </div > <!-- navbar-collapse.// -->#}
+    {#    </nav >#}
+    <script type="text/javascript" >
+        // Prevent closing from click inside dropdown
+        $(document).on('click', '.dropdown-menu', function (e) {
+            e.stopPropagation();
+        });
+
+        // make it as accordion for smaller screens
+        if ($(window).width() < 992) {
+            $('.dropdown-menu a').click(function (e) {
+                e.preventDefault();
+                if ($(this).next('.submenu').length) {
+                    $(this).next('.submenu').toggle();
+                }
+                $('.dropdown').on('hide.bs.dropdown', function () {
+                    $(this).find('.submenu').hide();
+                })
+            });
+        }
+    </script >
+{% endblock %}
+<script type="text/javascript" >
+    $(document).ready(function () {
+        $("#quickviewbtn").click(function () {
+            alert($(this).closest('.product-select').children('#demotitle').val());
+            {#$("#quickViewModal").modal("show");#}
+        });
+
+
+        $("#quickViewModal").on('shown.bs.modal', function () {
+            {#alert('The modal is fully shown.');#}
+            $('.slide-img, .big-img').slick('setPosition').slick();
+
+        });
+    });
+</script >
+<div id="modal-div" >
+</div >
+{#<script type="text/javascript" >#}
+{#    $(document).ready(function () {#}
+{#        var modalDiv = $("#modal-div");#}
+{#        $("#quickviewbtn").on("click", function () {#}
+{##}
+{#            $.ajax({#}
+{#                url: $(this).attr("data-url"),#}
+{#                success: function (data) {#}
+{#                    modalDiv.html(data);#}
+{#                    $("#quickViewModal").modal();#}
+{#                }#}
+{#            });#}
+{#        });#}
+{#    });#}
+{#</script >#}
+
+{% block nav %}
+{% endblock %}
+
+{% block body %}
+{% endblock %}
+{% block extra_body %}
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
+<script type="text/javascript" >
+    $(document).ready(function () {
+        $("#quickviewbtn").on("click", function () {
+            alert("skdfjsdjf");
+            {#$("#quickViewModal").modal("show");#}
+        });
+        $("#quickViewModal").on('shown.bs.modal', function () {
+            {#alert('The modal is fully shown.');#}
+            $('.slide-img, .big-img').slick('setPosition').slick();
+
+        });
+    });
+</script >
+</body >
+</html >

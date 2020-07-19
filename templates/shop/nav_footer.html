@@ -131,7 +131,7 @@
                     </div >
                     <div class="col-7" >
                         <div class="navgition-menu d-flex align-items-center justify-content-center" >
-                            <ul class="mb-0"  >
+                            <ul class="mb-0" >
                                 <li class="toggleable" ><a class="menu-item active" href="{% url 'shop:home' %}" >Home</a ></li >
                                 {#                                <li class="toggleable" ><a class="menu-item" href="shop_grid%2blist_3col.html" >Shop</a >#}
                                 {#                                    <ul class="sub-menu shop d-flex" >#}
@@ -162,11 +162,11 @@
                                         <li >Coming Soon</li >
                                     </ul >
                                 </li >
-                                <li class="toggleable" ><a class="menu-item" href="{% url 'shop:about_us' %}" >About us</a ></li >
-                                <li class="toggleable" ><a class="menu-item" href="{% url 'shop:contact_us' %}" >Contact us</a ></li >
                                 <li class="toggleable" ><a class="menu-item flashbtn" href="{% url 'shop:cattle-shop' %}" >কোরবানি
                                                                                                                            স্পেশাল<span ></span ><span ></span ><span ></span ><span ></span ></a >
                                 </li >
+                                <li class="toggleable" ><a class="menu-item" href="{% url 'shop:about_us' %}" >About us</a ></li >
+                                <li class="toggleable" ><a class="menu-item" href="{% url 'shop:contact_us' %}" >Contact us</a ></li >
                             </ul >
                         </div >
                     </div >
@@ -177,8 +177,10 @@
                                         style="margin-left: 2px; font-size: 12px" > 0</span ></a >
                                 </div >
                                 <div id="cart" ><a class="function-icon icon_bag_alt"
-                                                   style="color:#cb241b; " href="{% url 'shop:order-summary' %}" ><span
-                                        style="margin-left: 0px;font-size: 12px" >{{ request.user|cart_item_count }}</span ></a >
+                                                   style="color:#cb241b; " href="" ><span
+{#                                        {% url 'shop:order-summary' %}#}
+                                        style="margin-left: 0px;font-size: 12px" ></span ></a >
+                                    {# {{ request.user|cart_item_count }} #}
                                 </div >
                                 &nbsp;&nbsp;&nbsp;&nbsp;<div ><a class="function-icon " href="/accounts/logout" >Log out</a ></div >
                             </div >
@@ -247,9 +249,10 @@
                                         </div >
                                         <br >
                                         <div id="mobile-menu_items" >
-                                            <a style="color:#cb241b; " href="{% url 'shop:order-summary' %}" >My Cart <span
-                                                    style="margin-left: 0px;font-size: 12px" >{{ request.user|cart_item_count }} Items</span ></a >
+                                            <a style="color:#cb241b; " href="" >My Cart <span
+                                                    style="margin-left: 0px;font-size: 12px" > Items</span ></a >
                                         </div >
+
                                         &nbsp;&nbsp;&nbsp;&nbsp;
                                         <div >
                                             <a class="function-icon " href="/accounts/logout" >Log out</a >
@@ -270,13 +273,19 @@
                     </div >
                     <div class="col-6" >
                         <div class="mobile-menu_logo text-center d-flex justify-content-center align-items-center" ><a href="#" ><img
-                                src="assets/images/logo.png" alt="" ></a ></div >
+                                src="{% static 'assets/images/logo.png' %}" alt="" ></a ></div >
                     </div >
                     <div class="col-3" >
-                        <div class="mobile-product_function d-flex align-items-center justify-content-end" ><a class="function-icon icon_heart_alt"
-                                                                                                               href="wishlist.html" ></a ><a
-                                class="function-icon icon_bag_alt"
-                                href="{% url 'shop:order-summary' %}" ><span >{{ request.user|cart_item_count }}</span ></a ></div >
+                        <div class="mobile-product_function d-flex align-items-center justify-content-end" >
+                            <a class="function-icon icon_heart_alt" href="" ></a >
+                            <a class="function-icon icon_bag_alt" href="{% url 'shop:order-summary' %}" >
+                                <span >
+                                    {% if user.is_authenticated %}
+                                        {{ request.user|cart_item_count }}
+                                    {% endif %}
+                            </span >
+                            </a >
+                        </div >
                     </div >
                 </div >
             </div >
@@ -286,9 +295,48 @@
 {% endblock %}
 
 {% block footer %}
-
+    <div class="partner" >
+                    <div class="container" >
+                        <div class="partner_block d-flex justify-content-between"
+                             data-slick="{&quot;slidesToShow&quot;: 6}" >
+                            <div class="partner--logo" href="#" ><a href="#" ><img
+                                    src="{% static 'assets/images/partner/pran.png' %}"
+                                    alt="partner"
+                                    title="partner logo" ></a ></div >
+                            <div class="partner--logo" href="#" ><a href="#" ><img
+                                    src="{% static 'assets/images/partner/square.png' %}"
+                                    alt="partner"
+                                    title="partner logo" ></a ></div >
+                            <div class="partner--logo" href="#" ><a href="#" ><img
+                                    src="{% static 'assets/images/partner/aci.png' %}"
+                                    alt="partner"
+                                    title="partner logo" ></a ></div >
+                            <div class="partner--logo" href="#" ><a href="#" ><img
+                                    src="{% static 'assets/images/partner/reckitt.png' %}"
+                                    alt="partner"
+                                    title="partner logo" ></a ></div >
+                            <div class="partner--logo" href="#" ><a href="#" ><img
+                                    src="{% static 'assets/images/partner/pran.png' %}"
+                                    alt="partner"
+                                    title="partner logo" ></a ></div >
+                            <div class="partner--logo" href="#" ><a href="#" ><img
+                                    src="{% static 'assets/images/partner/square.png' %}"
+                                    alt="partner"
+                                    title="partner logo" ></a ></div >
+                            <div class="partner--logo" href="#" ><a href="#" ><img
+                                    src="{% static 'assets/images/partner/aci.png' %}"
+                                    alt="partner"
+                                    title="partner logo" ></a ></div >
+                            <div class="partner--logo" href="#" ><a href="#" ><img
+                                    src="{% static 'assets/images/partner/reckitt.png' %}"
+                                    alt="partner"
+                                    title="partner logo" ></a ></div >
+                        </div >
+                    </div >
+                </div >
+                <!-- End partner-->
     <footer class="coffee" >
-        <div class="container" style="border-top: 1px solid #d5d3d3; padding-top: 20px;">
+        <div class="container" style="border-top: 1px solid #d5d3d3; padding-top: 20px;" >
             <div class="row" >
                 <div class="col-12 col-sm-12 col-md-4 text-sm-center text-md-left" >
                     <div class="footer-logo" ><img src="{% static 'assets/images/logo.png' %}" alt="" ></div >
@@ -356,7 +404,7 @@
             <div class="container" >
                 <div class="footer-creadit_block d-flex flex-column flex-md-row justify-content-start justify-content-md-between align-items-baseline align-items-md-center" >
                     <p class="author" >Copyright © 2020 Somikoron - All Rights Reserved.</p ><img class="payment-method"
-                                                                                                  src="assets/images/payment.png"
+                                                                                                  src=""
                                                                                                   alt="" >
                 </div >
             </div >

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'mathfilters',
     'serializers',
     'rest_framework',
+    'stdimage',
     # allauth
     'django.contrib.sites',
     'allauth',

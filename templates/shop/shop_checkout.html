@@ -14,33 +14,12 @@
     </head >
     <body >
     <div id="main" >
+
         <header class="coffee-2" >
-            <div class="navigation-filter" >
+            <div class="navigation-filter" style="margin-top: 65px" >
                 <div class="container" >
                     <div class="row" >
-                        <div class="col-12 col-md-4 col-lg-4 col-xl-3 order-2 order-md-1" >
-                            <div class="department-menu_block" >
-                                <div class="department-menu d-flex justify-content-between align-items-center" ><i class="fas fa-bars" ></i >All
-                                                                                                                                             departments<span ><i
-                                            class="arrow_carrot-down" ></i ></span ></div >
-                                <div class="department-dropdown-menu" >
-                                    <ul >
-                                        <li ><a href="shop_grid%2blist_3col.html" > <i class="icon-1" ></i >Fresh Meat</a ></li >
-                                        <li ><a href="shop_grid%2blist_3col.html" > <i class="icon-2" ></i >Vegetables</a ></li >
-                                        <li ><a href="shop_grid%2blist_3col.html" > <i class="icon-3" ></i >Fruit & Nut Gifts</a ></li >
-                                        <li ><a href="shop_grid%2blist_3col.html" > <i class="icon-4" ></i >Fresh Berries</a ></li >
-                                        <li ><a href="shop_grid%2blist_3col.html" > <i class="icon-5" ></i >Ocean Foods</a ></li >
-                                        <li ><a href="shop_grid%2blist_3col.html" ><i class="icon-6" ></i >Butter & Eggs</a ></li >
-                                        <li ><a href="shop_grid%2blist_3col.html" ><i class="icon-7" ></i >Fastfood</a ></li >
-                                        <li ><a href="shop_grid%2blist_3col.html" > <i class="icon-8" ></i >Fresh Onion</a ></li >
-                                        <li ><a href="shop_grid%2blist_3col.html" > <i class="icon-9" ></i >Papayaya & Crisps</a ></li >
-                                        <li ><a href="shop_grid%2blist_3col.html" ><i class="icon-10" ></i >Oatmeal</a ></li >
-                                        <li ><a href="shop_grid%2blist_3col.html" > <i class="icon-11" ></i >Fresh Bananas</a ></li >
-                                    </ul >
-                                </div >
-                            </div >
-                        </div >
-                        <div class="col-12 col-md-8 col-lg-8 col-xl-9 order-1 order-md-2" >
+                        <div class="col-12 col-md-12 col-lg-12 col-xl-12 order-1 order-md-2" >
                             <div class="website-search" >
                                 <div class="row no-gutters" >
                                     <div class="col-0 col-md-0 col-lg-4 col-xl-3" >
@@ -49,22 +28,26 @@
                                                 <span >All Categories</span ><i class="arrow_carrot-down" ></i ></div >
                                             <div class="categories-select_box" >
                                                 <ul >
-                                                    <li >Fruit & Nut Gifts</li >
-                                                    <li >Fresh Berries</li >
-                                                    <li >Ocean Foods</li >
-                                                    <li >Butter & Eggs</li >
-                                                    <li >Ocean Foods</li >
+                                                    {% for cat in categories %}
+                                                        <li >{{ cat.category_name }}</li >
+                                                    {% endfor %}
                                                 </ul >
                                             </div >
                                         </div >
                                     </div >
                                     <div class="col-8 col-md-8 col-lg-5 col-xl-7" >
                                         <div class="search-input" >
-                                            <input class="no-round-input no-border" type="text" placeholder="What do you need" >
+                                            <form id="search-form" action="{% url 'search:searchitems' %}" method="GET"
+                                                  value="{{ request.GET.q }}" >
+                                                <input class="no-round-input no-border" type="text" name="q" value="{{ request.GET.q }}"
+                                                       placeholder="What do you need" />
+                                            </form >
                                         </div >
                                     </div >
                                     <div class="col-4 col-md-4 col-lg-3 col-xl-2" >
-                                        <button class="no-round-btn" >Search</button >
+                                        <button class="no-round-btn coffee" type="submit" name="submit" value="Search"
+                                                onclick="document.getElementById('search-form').submit();" >Search
+                                        </button >
                                     </div >
                                 </div >
                             </div >
@@ -235,19 +218,29 @@
                                                 <td >{{ object.get_total }}</td >
                                             </tr >
                                             <tr style="height: 70px; " >
-                                                <th style="width: 40%;text-align: left" >SHIPPING</th >
+                                                <th style="width: 40%;text-align: left" >DELIVERY CHARGE</th >
                                                 <td >
-                                                    <p >100</p >
+                                                    <p >{% if object.get_total >= 1000 %}
+                                                        40 Tk
+                                                        {% else %}
+                                                        60 Tk
+                                                    {% endif %} </p >
                                                 </td >
                                             </tr >
                                             <tr style="height: 70px; " >
                                                 <th style="width: 40%;text-align: left" >Coupon Discount</th >
-                                                <td ><p >10</p ></td >
+                                                <td ><p >0</p ></td >
                                             </tr >
                                             <tr style="height: 65px; " >
                                                 {% load mathfilters %}
                                                 <th style="width: 40%;text-align: left" >TOTAL</th >
-                                                <td >{{ object.get_total|addition:100 |sub:10 }}</td >
+                                                <td >
+                                                    {% if object.get_total >= 1000 %}
+                                                        {{ object.get_total|addition:40 |sub:0 }}
+                                                        {% else %}
+                                                        {{ object.get_total|addition:60 |sub:0 }}
+                                                    {% endif %}
+                                                    </td >
                                             </tr >
                                             </tbody >
                                         </table >
@@ -273,28 +266,12 @@
                 </form >
             </div >
         </div >
-        <div class="partner" >
-            <div class="container" >
-                <div class="partner_block d-flex justify-content-between" data-slick="{&quot;slidesToShow&quot;: 6}" >
-                    <div class="partner--logo" href="#" ><a href="#" ><img src="{% static 'assets/images/partner/partner_01.png' %}"
-                                                                           alt="partner logo" ></a ></div >
-                    <div class="partner--logo" href="#" ><a href="#" ><img src="{% static 'assets/images/partner/partner_02.png' %}"
-                                                                           alt="partner logo" ></a ></div >
-                    <div class="partner--logo" href="#" ><a href="#" ><img src="{% static 'assets/images/partner/partner_01.png' %}"
-                                                                           alt="partner logo" ></a ></div >
-                    <div class="partner--logo" href="#" ><a href="#" ><img src="{% static 'assets/images/partner/partner_02.png' %}"
-                                                                           alt="partner logo" ></a ></div >
-                    <div class="partner--logo" href="#" ><a href="#" ><img src="{% static 'assets/images/partner/partner_01.png' %}"
-                                                                           alt="partner logo" ></a ></div >
-                    <div class="partner--logo" href="#" ><a href="#" ><img src="{% static 'assets/images/partner/partner_02.png' %}"
-                                                                           alt="partner logo" ></a ></div >
-                    <div class="partner--logo" href="#" ><a href="#" ><img src="{% static 'assets/images/partner/partner_01.png' %}"
-                                                                           alt="partner logo" ></a ></div >
-                </div >
-            </div >
-        </div >
-        <!-- End partner-->
     </div >
+    <script type="text/javascript">
+    $(document).ready(function () {
+        document.getElementById('floatcart').style.display = 'none';
+    })
+    </script>
     </body >
     <!-- Mirrored from afinda.vn/html/Ogami/shop_checkout.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 27 Jun 2020 12:00:56 GMT -->
     </html >
