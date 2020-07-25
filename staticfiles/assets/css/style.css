@@ -7180,3 +7180,49 @@ footer.coffee .newletter {
 @media (min-width: 576px) and (max-width: 767px) {
   .error-404 .normal-btn {
     margin-bottom: 60px; } }
+
+
+
+
+
+
+@media (max-width: 576px){
+    .product .product-name {
+        font-size: 10px;
+    }
+.product .product-img {
+    padding: 0px;
+}
+.product_images{
+    height: 100px;
+    width: 100%;
+    overflow: hidden;
+}
+.product_images .product-img {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    margin-bottom: 0px;
+    justify-content: center;
+    align-items: center;
+}
+
+.all_btn {
+    width: 146px !important;
+    display: block !important;
+    border-radius: 3px !important;
+    height: 31px !important;
+    line-height: 29px !important;
+}
+.product .product-type {
+    font-family: "Cera Pro Bold";
+    font-size: 12px;
+    color: #cb241b;
+    line-height: 1;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+}
+
+}

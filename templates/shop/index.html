@@ -23,7 +23,7 @@
         {#        </style >#}
     </head >
     <body >
-    <div id="main" >
+    <div id="main" style='margin-top:0px;' >
         <header class="coffee-2" >
             <div class="navigation-filter" style="margin-top: 65px" >
                 <div class="container" >
@@ -341,9 +341,12 @@
                                     {% for item in object_list|slice:":12" %}
                                         <div class="col-6 col-md-4 col-lg-3 cartable" >
                                             <div class="product coffee" >
-                                                <a class="product-img " href="{{ item.itemdetails.get_absolute_url }}" ><img
-                                                        class="img-fluid product__image" src="{{ item.images.all.0.image.thumbnail.url }}"
-                                                        alt="{{ item.images.all.0.image.url }}" ></a >
+<!--                                                <a class="product-img " href="{{ item.itemdetails.get_absolute_url }}" ><img-->
+<!--                                                        class="img-fluid product__image" src="{{ item.images.all.0.image.thumbnail.url }}"-->
+<!--                                                        alt="{{ item.images.all.0.image.url }}" ></a >-->
+                                                <div class="product_images">
+    <a class="product-img " href="/itemdetails/s_bc0024"><img class="img-fluid product__image" src="/media/media/images/sepnil-HW-pack-marigold-new-pack.thumbnail.png" alt="/media/media/images/sepnil-HW-pack-marigold-new-pack.png"></a>
+</div>
                                                 <h5 class="product-type" >{{ item.sub_category.category.category_name }}</h5 >
                                                 <h3 class="product-name" >{{ item.title }}</h3 >
                                                 {% if item.itemdetails.discount_offer > 0 %}
